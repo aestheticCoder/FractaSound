@@ -1,4 +1,4 @@
-package com.company;
+package UI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,10 +13,11 @@ public class UIFrame extends JFrame {
 
 
     private void initUI(){
-        add(new FractalAnimationPanel(), BorderLayout.CENTER);
+        add(new graphics.FractalAnimationPanel(), BorderLayout.CENTER);
         setSize(900, 600);
         setTitle("Julia Fractal Explorer");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         /*
         May need to create a costume look and feel for our UI frame
         As well as other optimizations and clean up for our UI

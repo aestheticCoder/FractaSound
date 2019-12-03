@@ -1,4 +1,4 @@
-package com.company;
+package graphics;
 
 public class CoordToComplexConverter {
 
