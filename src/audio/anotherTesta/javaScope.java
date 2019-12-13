@@ -106,23 +106,19 @@ public class javaScope extends JFrame
 		contentPane.add(canvas);
 		
 		btnStartStop = new JButton("Start");
-		btnStartStop.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent arg0)
-			{
-				if (btnStartStop.getText().equals("Start"))
-				{
-					running = true;
-					btnStartStop.setText("Stop");
-					captureAudio();
-				}
-				else
-				{
-					running = false;
-					btnStartStop.setText("Start");
-				}
-			}
-		});
+		btnStartStop.addActionListener(arg0 -> {
+            if (btnStartStop.getText().equals("Start"))
+            {
+                running = true;
+                btnStartStop.setText("Stop");
+                captureAudio();
+            }
+            else
+            {
+                running = false;
+                btnStartStop.setText("Start");
+            }
+        });
 		btnStartStop.setBounds(409, 198, 63, 23);
 		contentPane.add(btnStartStop);
 		
@@ -228,60 +224,56 @@ public class javaScope extends JFrame
 			 outLine = (SourceDataLine) AudioSystem.getLine(outInfo);
 			 outLine.open(format, LINE_BUFF_SIZE);
 			 outLine.start();
-			 
-			 Runnable runner = new Runnable()
-			 {
-				 public void run()
-				 {
-					 byte inBuffer[] = new byte[READ_BUFF_SIZE];
-					 byte outBuffer[] = new byte[READ_BUFF_SIZE];
-					 int buffSize = inBuffer.length;
-					 
-					 while (running)
-					 {
-						 int bytesAvailable = inLine.available();
-						 if (bytesAvailable >= READ_BUFF_SIZE)
-						 {
-							 int bytesRead = inLine.read(inBuffer, 0, buffSize);
-							 // Convert  to floating point
-							 for(int i = 0; i < buffSize; i += 2)
-								 dataBuff[i/2] = ((inBuffer[i] & 0xFF)|(inBuffer[i + 1] << 8)) / 32768.0F;
-						
-							 // Convert back to PCM
-							 // This section converts from floating point back to signed PCM
-							 // just to prove that its possible to do a bi of processing in Java.
-							 if (chckbxLoop.isSelected())
-							 {
-								 for (int i = 0; i < buffSize; i += 2)
-								 {
-									 // Saturation
-									 float fSample = dataBuff[i/2];
-									 fSample = Math.min(1.0F, Math.max(-1.0F, fSample));
-									 // Scaling and conversion to integer
-									 int nSample = Math.round(fSample * 32767.0F);
-									 outBuffer[i+1] = (byte) ((nSample >> 8) & 0xFF);
-									 outBuffer[i] = (byte) (nSample & 0xFF);
-								 }
-							 }
-							 else
-							 {
-								 for (int i = 0; i < buffSize; i++)
-								 {
-									 outBuffer[i] = 0;
-								 }
-							 }
-							 outLine.write(outBuffer, 0, bytesRead);
-							 canvas.repaint();							 
-						 }
-					 }
-					 inLine.flush();
-					 inLine.stop();
-					 inLine.close();
-					 outLine.flush();
-					 outLine.stop();
-	    			 outLine.close();
-				 }				  
-			 };
+
+			 Runnable runner = () -> {
+                 byte inBuffer[] = new byte[READ_BUFF_SIZE];
+                 byte outBuffer[] = new byte[READ_BUFF_SIZE];
+                 int buffSize = inBuffer.length;
+
+                 while (running)
+                 {
+                     int bytesAvailable = inLine.available();
+                     if (bytesAvailable >= READ_BUFF_SIZE)
+                     {
+                         int bytesRead = inLine.read(inBuffer, 0, buffSize);
+                         // Convert  to floating point
+                         for(int i = 0; i < buffSize; i += 2)
+                             dataBuff[i/2] = ((inBuffer[i] & 0xFF)|(inBuffer[i + 1] << 8)) / 32768.0F;
+
+                         // Convert back to PCM
+                         // This section converts from floating point back to signed PCM
+                         // just to prove that its possible to do a bi of processing in Java.
+                         if (chckbxLoop.isSelected())
+                         {
+                             for (int i = 0; i < buffSize; i += 2)
+                             {
+                                 // Saturation
+                                 float fSample = dataBuff[i/2];
+                                 fSample = Math.min(1.0F, Math.max(-1.0F, fSample));
+                                 // Scaling and conversion to integer
+                                 int nSample = Math.round(fSample * 32767.0F);
+                                 outBuffer[i+1] = (byte) ((nSample >> 8) & 0xFF);
+                                 outBuffer[i] = (byte) (nSample & 0xFF);
+                             }
+                         }
+                         else
+                         {
+                             for (int i = 0; i < buffSize; i++)
+                             {
+                                 outBuffer[i] = 0;
+                             }
+                         }
+                         outLine.write(outBuffer, 0, bytesRead);
+                         canvas.repaint();
+                     }
+                 }
+                 inLine.flush();
+                 inLine.stop();
+                 inLine.close();
+                 outLine.flush();
+                 outLine.stop();
+                 outLine.close();
+             };
 	      
 			 Thread captureThread = new Thread(runner);
 			 captureThread.start();

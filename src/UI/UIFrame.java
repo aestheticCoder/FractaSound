@@ -14,7 +14,7 @@ public class UIFrame extends JFrame {
 
     private void initUI(){
         add(new graphics.FractalAnimationPanel(), BorderLayout.CENTER);
-        setSize(900, 600);
+        setSize(1200, 800);
         setTitle("Julia Fractal Explorer");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
