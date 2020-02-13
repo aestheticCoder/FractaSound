@@ -11,16 +11,10 @@ public class FractalAnimationPanel extends JPanel implements MouseMotionListener
     private int x,y = 0;
     private final double W;
     private final double H;
-    //I think i might be having a namespace clash on width and height,
-    //when i comment out my H and W the event thread error goes away as runs fine but i see nothing
-    //when i leave in i have event thread error width/hieght can't be set to 0?
-    //i think it's messing up my converter as it sets them to 1 and 2 for w and h
-    //Fix: needed to setSize for both the UIFrame and tbe Fractal Animation Panel
 
-    //Just need to clean this up a bit and then put it on git! :)
 
     public FractalAnimationPanel(){
-        setSize(900, 600);
+        setSize(1200, 800);
         W = this.getSize().getWidth();
         H = this.getSize().getHeight();
         initMouseListener();
@@ -81,7 +75,7 @@ public class FractalAnimationPanel extends JPanel implements MouseMotionListener
         //ImC = 0.27015;
 
         //set initial maxIterations value
-        int maxIterations = 256;
+        int maxIterations = 300;
         double newReC, newImC, oldReC, oldImC;
 
         //draw fractal
