@@ -26,7 +26,7 @@ public class FourierTransform {
             realOutput[k] = sumReal;
             imagOutput[k] = sumImag;
         }
-    }
+    } // test with sum of two sin wave peaks
 
     private void maxValues() {
     }
