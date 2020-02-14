@@ -1,20 +1,37 @@
 package audio;
 
 public class FourierTransform {
-    private double[] realOutput;
+    /*private double[] realOutput;
     private double[] imagOutput;
+    */
 
+    /*
     public FourierTransform(int len) {
         realOutput = new double[len];
         imagOutput = new double[len];
     }
+    */
+    public FourierTransform() {
+        // Nothing
+    }
 
+    /*
     public void transform() {
         maxValues();
     }
+    */
 
-    private void discreteFourier(double[] inFreq) {
+    public SamplePeak discreteFourier(double[] inFreq) {
         int timeInterv = inFreq.length;
+
+        /*
+        // temporary arrays until all values calculated
+        double[] realComp = new double[realOutput.length];
+        double[] imagComp = new double[imagOutput.length];
+        */
+        double maxReal = 0.0;
+        double maxImag = 0.0;
+
         for (int k = 0; k < timeInterv; k++) {
             double sumReal = 0.0;
             double sumImag = 0.0;
@@ -23,13 +40,31 @@ public class FourierTransform {
                 sumReal += t * Math.cos(angle) + inFreq[t] * Math.sin(angle);
                 sumImag += -t * Math.cos(angle) + inFreq[t] * Math.sin(angle);
             }
-            realOutput[k] = sumReal;
-            imagOutput[k] = sumImag;
+
+            if (sumReal > maxReal) {
+                maxReal = sumReal;
+            }
+            if (sumImag > maxImag) {
+                maxImag = sumImag;
+            }
+            /*
+            realComp[k] = sumReal;
+            imagComp[k] = sumImag;
+            */
         }
+
+        return new SamplePeak(maxReal, maxImag);
+        /*
+        realOutput = realComp;
+        imagOutput = imagComp;
+        */
     } // test with sum of two sin wave peaks
 
+    /*
     private void maxValues() {
+        // TODO: maybe later
     }
+    */
 
     /*
     public double calculate_definite_integral_of_f(f, initial_step_size){
