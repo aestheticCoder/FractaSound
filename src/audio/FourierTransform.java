@@ -1,34 +1,43 @@
 package audio;
 
+import java.nio.ByteBuffer;
+
 public class FourierTransform {
-    /*private double[] realOutput;
-    private double[] imagOutput;
-    */
+    private byte[] sufficientData;
+    private int dataInd;
+    private SamplePeak latestPeak; // TODO: convert to out-reference
 
-    /*
-    public FourierTransform(int len) {
-        realOutput = new double[len];
-        imagOutput = new double[len];
-    }
-    */
-    public FourierTransform() {
-        // Nothing
+    public FourierTransform(int frameRate) {
+        sufficientData = new byte[frameRate];
+        dataInd = 0;
+        latestPeak = new SamplePeak(0,0);
     }
 
-    /*
-    public void transform() {
-        maxValues();
-    }
-    */
+    public synchronized void byteChomper(byte another) {
+        if (dataInd < sufficientData.length) {
+            sufficientData[dataInd] = another;
+            dataInd++;
+        }
+        else {
+            latestPeak = discreteFourier(sufficientData);
 
-    public SamplePeak discreteFourier(double[] inFreq) {
+            sufficientData[0] = another;
+            dataInd = 1;
+        }
+    }
+
+    public SamplePeak getLatestPeak() {
+        return latestPeak;
+    }
+
+    /**
+     *
+     * @param inFreq double[] input
+     * @return
+     */
+    private SamplePeak discreteFourier(double[] inFreq) { // double[] input format
         int timeInterv = inFreq.length;
 
-        /*
-        // temporary arrays until all values calculated
-        double[] realComp = new double[realOutput.length];
-        double[] imagComp = new double[imagOutput.length];
-        */
         double maxReal = 0.0;
         double maxImag = 0.0;
 
@@ -37,8 +46,9 @@ public class FourierTransform {
             double sumImag = 0.0;
             for (int t = 0; t < timeInterv; t++) {
                 double angle = 2 * Math.PI * t * k / timeInterv;
-                sumReal += t * Math.cos(angle) + inFreq[t] * Math.sin(angle);
-                sumImag += -t * Math.cos(angle) + inFreq[t] * Math.sin(angle);
+                double currentVal = inFreq[t];
+                sumReal += currentVal * Math.cos(angle) + currentVal * Math.sin(angle);
+                sumImag += -currentVal * Math.cos(angle) + currentVal * Math.sin(angle);
             }
 
             if (sumReal > maxReal) {
@@ -47,49 +57,28 @@ public class FourierTransform {
             if (sumImag > maxImag) {
                 maxImag = sumImag;
             }
-            /*
-            realComp[k] = sumReal;
-            imagComp[k] = sumImag;
-            */
         }
 
         return new SamplePeak(maxReal, maxImag);
-        /*
-        realOutput = realComp;
-        imagOutput = imagComp;
-        */
-    } // test with sum of two sin wave peaks
-
-    /*
-    private void maxValues() {
-        // TODO: maybe later
     }
-    */
 
-    /*
-    public double calculate_definite_integral_of_f(f, initial_step_size){
-        /*
-        This algorithm calculates the definite integral of a function
-        from 0 to 1, adaptively, by choosing smaller steps near
-        problematic points.
+    /**
+     * Wrapper(overloaded) version of above method call discreteFourier that handles byte[] input before calculation
+     *
+     * @param convIntoFreq byte[] input to be converted into double[] and then undergo DiscreteFourier
+     * @return SamplePeak result of maxima of DiscreteFourier
+     */
+    private SamplePeak discreteFourier(byte[] convIntoFreq) { // byte[] input format wrapper for double[] input
+        double[] values = new double[convIntoFreq.length / 8];
 
-        double x = 0.0;
-        h = initial_step_size;
-        accumulator = 0.0;
-        while (x < 1.0) {
-            if (x + h > 1.0) {
-                double h = 1.0 - x;  // At end of unit interval, adjust last step to end at 1.
-            }
-            if (error_too_big_in_quadrature_of_f_over_range(f,[x,x + h])) {
-                    h = make_h_smaller(h);
-            }
-            else {
-                    accumulator += quadrature_of_f_over_range(f,[x, x + h]);
-                    x += h;
-                    if (error_too_small_in_quadrature_of_over_range(f,[x,x + h])){
-                        h = make_h_larger(h)  //Avoid wasting time on tiny steps.
-                    }
-                    return accumulator;
-                }
-            */
+        byte[] tempByte = new byte[8]; // 8-byte segments of convIntoFreq
+        int byteCounter = 0; // increments by 8 per iteration of for-loop
+        for (int i = 0; i < values.length; i++) {
+            System.arraycopy(convIntoFreq, byteCounter, tempByte, 0,8);
+            values[i] = ByteBuffer.wrap(tempByte).getDouble();
+            byteCounter += 8;
+        }
+
+        return discreteFourier(values); // passes to double[] input version
+    }
 }
