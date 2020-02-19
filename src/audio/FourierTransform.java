@@ -3,29 +3,17 @@ package audio;
 import java.nio.ByteBuffer;
 
 public class FourierTransform {
-    private byte[] sufficientData;
-    private int dataInd;
-    private SamplePeak latestPeak;
-    private boolean changeFlag;
-
-    /**
-     * Initializes values of FourierTransform so that proper addition of bytes can be made
-     *
-     * @param frameRate the size of the byte[] before each calculation is made
-     */
-    public FourierTransform(int frameRate) {
-        sufficientData = new byte[frameRate];
-        dataInd = 0;
-        latestPeak = new SamplePeak(0,0);
-        changeFlag = false;
-    }
+    private static byte[] sufficientData = new byte[30];
+    private static int dataInd = 0;
+    private static SamplePeak latestPeak = new SamplePeak(0,0);
+    private static boolean changeFlag = false;
 
     /**
      * Takes in another byte value, checks if the byte[] sufficientData is full, and then adds the new byte to the array
      *
      * @param another another byte to be added onto the byte[] of values for parsing
      */
-    public synchronized void byteChomper(byte another) {
+    public static synchronized void byteChomper(byte another) {
         if (dataInd < sufficientData.length) {
             sufficientData[dataInd] = another;
             dataInd++;
@@ -43,18 +31,18 @@ public class FourierTransform {
      *
      * @param another another byte to be added onto the byte[] of values for parsing
      */
-    public synchronized void arrayChomski(byte[] another) {
+    public static synchronized void arrayChomski(byte[] another) {
         discreteFourier(another);
     }
 
-    public SamplePeak getLatestPeak() {
+    public static SamplePeak getLatestPeak() {
         return latestPeak;
     }
 
     /**
      * @return flag if SamplePeak changes
      */
-    public boolean isSamplePeakChanging() {
+    public static boolean isSamplePeakChanging() {
         if (changeFlag) {
             changeFlag = false;
             return true;
@@ -63,7 +51,7 @@ public class FourierTransform {
     }
 
     /*
-    private SamplePeak discreteFourier(double[] inFreq) { // double[] input format
+    private static SamplePeak discreteFourier(double[] inFreq) { // double[] input format
         int timeInterv = inFreq.length;
 
         double maxReal = 0.0;
@@ -96,7 +84,7 @@ public class FourierTransform {
      *
      * @param convIntoFreq byte[] input to be converted into double[] and then undergo Discrete Fourier transformation
      */
-    private void discreteFourier(byte[] convIntoFreq) { // byte[] input format wrapper for double[] input
+    private static void discreteFourier(byte[] convIntoFreq) { // byte[] input format wrapper for double[] input
         double[] inFreq = new double[convIntoFreq.length / 8];
 
         // Convert byte[] into double[]
