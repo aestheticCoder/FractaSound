@@ -43,11 +43,11 @@ public class CoordToComplexConverter {
     }
 
 
-    public double convertToRe( int num ){
+    public double convertToRe( double num ){
         return ReC = (((num - originMinX) * realNumRange) / originRangeX) + realNumMin;
     }
 
-    public double convertToIm( int num ){
+    public double convertToIm( double num ){
         return ImC = (((num - originMinY) * imaginaryNumRange) / originRangeY) + imaginaryNumMin;
     }
 }

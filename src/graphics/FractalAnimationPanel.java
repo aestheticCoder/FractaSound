@@ -1,23 +1,25 @@
 package graphics;
+import audio.FourierTransform;
+
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 
-public class FractalAnimationPanel extends JPanel implements MouseMotionListener {
+public class FractalAnimationPanel extends JPanel implements ChangeListener {
 
     private BufferedImage img;
     private CoordToComplexConverter cc;
-    private int x,y = 0;
+    private double x,y = 0.0;
     private final double W;
     private final double H;
-
 
     public FractalAnimationPanel(){
         setSize(1200, 800);
         W = this.getSize().getWidth();
         H = this.getSize().getHeight();
-        initMouseListener();
+        // initMouseListener();
         initComplexConverter();
         this.setBackground(Color.white);
     }
@@ -28,9 +30,6 @@ public class FractalAnimationPanel extends JPanel implements MouseMotionListener
         cc.setOriginRangeY(0,(int) H);
     }
 
-    private void initMouseListener(){
-        addMouseMotionListener(this);
-    }
 
     private void doDrawing(Graphics g){
         Graphics2D g2d = (Graphics2D)g;
@@ -52,7 +51,18 @@ public class FractalAnimationPanel extends JPanel implements MouseMotionListener
         g.drawImage(this.img, 0, 0, null);
     }
 
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        FourierTransform source = (FourierTransform)e.getSource();
+        if (source.isSamplePeakChanging()) {
+            audio.SamplePeak currentPeakValue = source.getLatestPeak();
+            this.x = currentPeakValue.getReal();
+            this.y = currentPeakValue.getImag();
+            repaint();
+        }
+    }
 
+    /*
     public void mouseMoved(java.awt.event.MouseEvent e) {
         //eventOutput("Mouse moved", e);
     }
@@ -62,6 +72,7 @@ public class FractalAnimationPanel extends JPanel implements MouseMotionListener
         this.y = e.getY();
         repaint();
     }
+    */
 
 
     private void createFractal( double ReC, double ImC){
@@ -125,6 +136,4 @@ public class FractalAnimationPanel extends JPanel implements MouseMotionListener
             }
         }
     }
-
-
 }
