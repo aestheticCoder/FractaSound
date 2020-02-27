@@ -16,7 +16,7 @@ public class FractalAnimationPanel extends JPanel implements ChangeListener {
     private final double H;
 
     public FractalAnimationPanel(){
-        setSize(1200, 800);
+        setSize(800, 600);
         W = this.getSize().getWidth();
         H = this.getSize().getHeight();
         // initMouseListener();
