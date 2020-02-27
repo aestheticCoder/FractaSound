@@ -7,26 +7,26 @@ import java.awt.event.ActionListener;
 
 public class ButtonPanel extends JPanel implements ActionListener {
 
-    JPanel bPanel = new JPanel();
-    JButton playButton = new JButton("Play");
-    JButton stopButton = new JButton("Stop");
+    private JButton playButton = new JButton("Play");
+    private JButton stopButton = new JButton("Stop");
 
     public ButtonPanel(){
-        setSize(800, 200);
-        this.setBackground(Color.white);
+        this.setPreferredSize(new Dimension(800,200));
+        this.setBackground(Color.black);
         playButtonProperties();
-        //stopButtonProperties();
+        stopButtonProperties();
     }
 
     private void playButtonProperties(){
         playButton.setBounds(0,200,100,40);
-        bPanel.add(playButton);
+        this.add(playButton);
         playButton.addActionListener(this);
+        playButton.setVisible(true);
     }
 
     private void stopButtonProperties(){
         stopButton.setBounds(100,200,100,40);
-        bPanel.add(stopButton);
+        this.add(stopButton);
         stopButton.addActionListener(this);
     }
 

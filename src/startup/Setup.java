@@ -24,9 +24,9 @@ public class Setup {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                UIContainer fracAnimation = new UIContainer();
-                //fracAnimation.pack();
-                fracAnimation.setVisible(true);
+                UIContainer uiContainer = new UIContainer();
+                uiContainer.pack();
+                uiContainer.setVisible(true);
             }
 
         });

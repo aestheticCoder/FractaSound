@@ -16,9 +16,9 @@ public class FractalAnimationPanel extends JPanel implements ChangeListener {
     private final double H;
 
     public FractalAnimationPanel(){
-        setSize(800, 600);
-        W = this.getSize().getWidth();
-        H = this.getSize().getHeight();
+        this.setPreferredSize(new Dimension(800,600));
+        W = this.getPreferredSize().getWidth();
+        H = this.getPreferredSize().getHeight();
         // initMouseListener();
         initComplexConverter();
         this.setBackground(Color.white);
@@ -29,8 +29,7 @@ public class FractalAnimationPanel extends JPanel implements ChangeListener {
         cc.setOriginRangeX(0,(int) W);
         cc.setOriginRangeY(0,(int) H);
     }
-
-
+    
     private void doDrawing(Graphics g){
         Graphics2D g2d = (Graphics2D)g;
 

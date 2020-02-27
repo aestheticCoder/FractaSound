@@ -19,7 +19,6 @@ public class UIContainer extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Setup for UI Frame
-        setSize(800, 800);
         setTitle("Fractal Visualizer");
         setLayout( new BorderLayout());
 
@@ -27,13 +26,6 @@ public class UIContainer extends JFrame {
         //Add Components
         //Add Fractal Animation Panel
         add(new graphics.FractalAnimationPanel(), BorderLayout.CENTER);
-
-        /*
-        Can't get this ButtonPanel to show up at the moment but it
-        manages to run with no errors.
-        Grant you think you could help me debug this?
-        -Alex
-         */
 
         //Add ButtonPanel
         add(new ButtonPanel(), BorderLayout.SOUTH);
