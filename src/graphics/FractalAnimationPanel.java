@@ -52,12 +52,11 @@ public class FractalAnimationPanel extends JPanel implements ChangeListener {
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        FourierTransform source = (FourierTransform)e.getSource();
-        if (source.isSamplePeakChanging()) {
-            audio.SamplePeak currentPeakValue = source.getLatestPeak();
+        if (FourierTransform.isSamplePeakChanging()) {
+            audio.SamplePeak currentPeakValue = FourierTransform.getLatestPeak();
             this.x = currentPeakValue.getReal();
             this.y = currentPeakValue.getImag();
-            repaint();
+            paintComponent(getGraphics());
         }
     }
 
