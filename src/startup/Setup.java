@@ -25,6 +25,7 @@ public class Setup {
             @Override
             public void run() {
                 UIContainer fracAnimation = new UIContainer();
+                //fracAnimation.pack();
                 fracAnimation.setVisible(true);
             }
 

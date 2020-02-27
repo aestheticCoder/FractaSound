@@ -15,9 +15,18 @@ public class UIContainer extends JFrame {
 
 
     private void initUI(){
-        add(new graphics.FractalAnimationPanel(), BorderLayout.CENTER);
-        setSize(800, 600);
+        //Set default close op
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //Setup for UI Frame
+        setSize(800, 800);
         setTitle("Fractal Visualizer");
+        setLayout( new BorderLayout());
+
+
+        //Add Components
+        //Add Fractal Animation Panel
+        add(new graphics.FractalAnimationPanel(), BorderLayout.CENTER);
 
         /*
         Can't get this ButtonPanel to show up at the moment but it
@@ -25,8 +34,10 @@ public class UIContainer extends JFrame {
         Grant you think you could help me debug this?
         -Alex
          */
-        add( new ButtonPanel(), BorderLayout.PAGE_END);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //Add ButtonPanel
+        add(new ButtonPanel(), BorderLayout.SOUTH);
+
 
 
         /*

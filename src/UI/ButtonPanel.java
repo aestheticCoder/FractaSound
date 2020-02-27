@@ -12,10 +12,10 @@ public class ButtonPanel extends JPanel implements ActionListener {
     JButton stopButton = new JButton("Stop");
 
     public ButtonPanel(){
-        setSize(200, 200);
+        setSize(800, 200);
         this.setBackground(Color.white);
         playButtonProperties();
-        stopButtonProperties();
+        //stopButtonProperties();
     }
 
     private void playButtonProperties(){
