@@ -22,13 +22,16 @@ public class UIContainer extends JFrame {
         setTitle("Fractal Visualizer");
         setLayout( new BorderLayout());
 
+        //Intialize AudioBeamer
+        AudioBeamer localAudioStream = new AudioBeamer();
+
 
         //Add Components
         //Add Fractal Animation Panel
         add(new graphics.FractalAnimationPanel(), BorderLayout.CENTER);
 
         //Add ButtonPanel
-        add(new ButtonPanel(), BorderLayout.SOUTH);
+        add(new ButtonPanel(localAudioStream), BorderLayout.SOUTH);
 
 
 

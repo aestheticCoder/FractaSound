@@ -65,6 +65,10 @@ public class AudioBeamer {
         }
     }
 
+    public String getFilePath() {
+        return "src/audio/island_music_x.wav";
+    }
+
 }
 
 

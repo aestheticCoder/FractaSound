@@ -14,12 +14,12 @@ public class Setup {
         //Must before we initialize anything!
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch(Exception ignored){}
+        } catch (Exception ignored) {
+        }
 
         // Initialize audio classes
         FourierTransform fourierTransformer = new FourierTransform();
-        AudioBeamer localAudioStream = new AudioBeamer();
-        String localAudioStreamPath = getAudioPath();
+
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -32,10 +32,5 @@ public class Setup {
         });
 
         // button calls beamMeUp.streamFile(audiophile);
-    }
-
-    private static String getAudioPath() {
-        return "C:\\Users\\Grant's PC\\Documents\\Capstone\\cleanRepoMan\\FractaSound\\src\\audio\\island_music_x.wav";
-        //String audioFilePath = "island_music_x.wav";
     }
 }
