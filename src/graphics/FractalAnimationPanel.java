@@ -1,19 +1,21 @@
 package graphics;
-import audio.FourierTransform;
 
+import audio.FourierTransform;
+import startup.AbstractObserver;
+
+import javax.security.auth.Subject;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class FractalAnimationPanel extends JPanel implements ChangeListener {
+public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ implements AbstractObserver {
 
     private BufferedImage img;
     private CoordToComplexConverter cc;
     private double x,y = 0.0;
     private final double W;
     private final double H;
+    private Subject subject;
 
     public FractalAnimationPanel(){
         this.setPreferredSize(new Dimension(800,600));
@@ -22,6 +24,7 @@ public class FractalAnimationPanel extends JPanel implements ChangeListener {
         // initMouseListener();
         initComplexConverter();
         this.setBackground(Color.white);
+        FourierTransform.attach(this);
     }
 
     private void initComplexConverter(){
@@ -40,6 +43,7 @@ public class FractalAnimationPanel extends JPanel implements ChangeListener {
 
         double r = cc.convertToRe(this.x);
         double i = cc.convertToIm(this.y);
+        System.out.println(r + " " + i);
         createFractal(r,i);
     }
 
@@ -48,8 +52,10 @@ public class FractalAnimationPanel extends JPanel implements ChangeListener {
         super.paintComponent(g);
         doDrawing(g);
         g.drawImage(this.img, 0, 0, null);
+        System.out.println("Got Here");
     }
 
+    /*
     @Override
     public void stateChanged(ChangeEvent e) {
         if (FourierTransform.isSamplePeakChanging()) {
@@ -59,6 +65,7 @@ public class FractalAnimationPanel extends JPanel implements ChangeListener {
             paintComponent(getGraphics());
         }
     }
+    */
 
     /*
     public void mouseMoved(java.awt.event.MouseEvent e) {
@@ -133,5 +140,13 @@ public class FractalAnimationPanel extends JPanel implements ChangeListener {
 
             }
         }
+    }
+
+    @Override
+    public void update() {
+        audio.SamplePeak currentPeakValue = FourierTransform.getLatestPeak();
+        this.x = currentPeakValue.getReal();
+        this.y = currentPeakValue.getImag();
+        repaint();
     }
 }

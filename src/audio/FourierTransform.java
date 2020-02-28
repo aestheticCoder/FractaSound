@@ -1,12 +1,21 @@
 package audio;
 
+import startup.AbstractObserver;
+
 import java.nio.ByteBuffer;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.time.Instant.now;
 
 public class FourierTransform {
     private static byte[] sufficientData = new byte[30];
     private static int dataInd = 0;
     private static SamplePeak latestPeak = new SamplePeak(0,0);
-    private static boolean changeFlag = false;
+    //private static boolean changeFlag = false;
+    private static List<AbstractObserver> observers = new ArrayList<>();
+    private static long timeSinceUpdate = System.nanoTime();
 
     /**
      * Takes in another byte value, checks if the byte[] sufficientData is full, and then adds the new byte to the array
@@ -35,19 +44,34 @@ public class FourierTransform {
         discreteFourier(another);
     }
 
+    /**
+     *
+     * @return latestPeak
+     */
     public static SamplePeak getLatestPeak() {
         return latestPeak;
     }
 
+
+    /*
     /**
      * @return flag if SamplePeak changes
-     */
+     *
     public static boolean isSamplePeakChanging() {
         if (changeFlag) {
             changeFlag = false;
             return true;
         }
         else return false;
+    }
+    */
+
+    /**
+     *
+     * @param obs
+     */
+    public static void attach(AbstractObserver obs) {
+        observers.add(obs);
     }
 
     /*
@@ -120,7 +144,21 @@ public class FourierTransform {
             }
         }
 
-        changeFlag = true;
+        //changeFlag = true;
         latestPeak = new SamplePeak(maxReal, maxImag);
+
+        if (System.nanoTime() - timeSinceUpdate > 1) {
+            timeSinceUpdate = System.nanoTime();
+            notifyAllObservers();
+        }
+    }
+
+    /**
+     *
+     */
+    private static void notifyAllObservers() {
+        for (AbstractObserver obs: observers) {
+            obs.update();
+        }
     }
 }
