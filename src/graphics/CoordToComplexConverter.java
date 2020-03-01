@@ -4,10 +4,10 @@ public class CoordToComplexConverter {
 
     private double ReC;
     private double ImC;
-    private int originRangeX;
-    private int originRangeY;
-    private int originMinX;
-    private int originMinY;
+    private double originRangeX;
+    private double originRangeY;
+    private double originMinX;
+    private double originMinY;
     private double realNumMin;
     private double imaginaryNumMin;
     private double realNumRange;
@@ -18,16 +18,17 @@ public class CoordToComplexConverter {
     public CoordToComplexConverter(String fractalType){
         if( fractalType.equalsIgnoreCase("mandelbrot")){
             //setRealNumRange(0.375,-1.375);
+
             setRealNumRange(0.5,-2.0);
             setImaginaryNumRange(-1,1);
         }
     }
 
-    public void setOriginRangeX( int originStart, int originEnd ){
+    public void setOriginRangeX( double originStart, double originEnd ){
         this.originMinX = originStart;
         this.originRangeX = originEnd - originStart;
     }
-    public void setOriginRangeY( int originStart, int originEnd ){
+    public void setOriginRangeY( double originStart, double originEnd ){
         this.originMinY = originStart;
         this.originRangeY = originEnd - originStart;
     }
@@ -41,7 +42,6 @@ public class CoordToComplexConverter {
         this.imaginaryNumMin = newStart;
         this.imaginaryNumRange = newEnd - newStart;
     }
-
 
     public double convertToRe( double num ){
         return ReC = (((num - originMinX) * realNumRange) / originRangeX) + realNumMin;

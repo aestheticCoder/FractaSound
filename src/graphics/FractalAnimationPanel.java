@@ -29,8 +29,8 @@ public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ 
 
     private void initComplexConverter(){
         this.cc = new CoordToComplexConverter("mandelbrot");
-        cc.setOriginRangeX(0,(int) W);
-        cc.setOriginRangeY(0,(int) H);
+        cc.setOriginRangeX(0, W);
+        cc.setOriginRangeY(0, H);
     }
     
     private void doDrawing(Graphics g){

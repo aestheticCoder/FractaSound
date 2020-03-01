@@ -9,7 +9,7 @@ public class AudioBeamer {
 
     private static final int BUFFER_SIZE = 2200;
 
-    public void streamFile(String audioFilePath){
+    public synchronized void streamFile(String audioFilePath){
 
         File audioFile = new File(audioFilePath);
 

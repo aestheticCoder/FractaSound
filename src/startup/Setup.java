@@ -30,7 +30,6 @@ public class Setup {
             }
 
         });
-
         // button calls beamMeUp.streamFile(audiophile);
     }
 }

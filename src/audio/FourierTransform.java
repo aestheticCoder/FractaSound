@@ -145,10 +145,16 @@ public class FourierTransform {
         }
 
         //changeFlag = true;
+
+        boolean badValue = (maxReal == Double.POSITIVE_INFINITY || maxImag == Double.POSITIVE_INFINITY
+                || maxReal == Double.NEGATIVE_INFINITY || maxImag == Double.NEGATIVE_INFINITY
+                || Double.isNaN(maxReal) || Double.isNaN(maxImag));
+
         latestPeak = new SamplePeak(maxReal, maxImag);
 
-        if (System.nanoTime() - timeSinceUpdate > 1) {
+        if ((System.nanoTime() - timeSinceUpdate > 1) && (!badValue)) {
             timeSinceUpdate = System.nanoTime();
+            //System.out.println(latestPeak.getReal() + " " + latestPeak.getImag());
             notifyAllObservers();
         }
     }
