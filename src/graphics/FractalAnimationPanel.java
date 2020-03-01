@@ -126,13 +126,17 @@ public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ 
                 // Checking if the pixel is an escapee
                 // If yes, setting the brightness to the maximum
                 // If no, setting the brightness to zero since the pixel is a prisoner
-                float Brightness = iter < maxIterations ? 1f : 0;
+                float Brightness = iter < maxIterations ? 0.75f : 0; // Change this line only for brightness offset
+
+                // Wraps hue around to start at blue (RGB 240) rather than red (RGB 0)
+                float colorModHue = iter + 185.0f; // Only change this line to set color offset
+                if (colorModHue > 255.0f) colorModHue -= 255.0f;
 
                 // Setting Hue to a function of number of iterations (i) taken to escape the radius 2
                 // Hue = (i%256)/255.0f;
                 // i%256 to bring i in range [0,255]
                 // Then dividing by 255.0f to bring it in range [0,1] so that we can pass it to Color.getHSBColor(H,S,B) function
-                float Hue = (iter % 256) / 255.0f;
+                float Hue = (colorModHue % 256) / 255.0f;
 
                 // Creating the color from HSB values and setting the pixel to the computed color
                 Color color = Color.getHSBColor(Hue, Saturation, Brightness);
