@@ -5,6 +5,7 @@ import audio.AudioBeamer;
 import audio.FourierTransform;
 
 import javax.swing.*;
+//import de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel;
 
 public class Setup {
     public static void main(String[] args) {
@@ -13,6 +14,7 @@ public class Setup {
         //Right now set to system look and feel
         //Must before we initialize anything!
         try {
+            //UIManager.setLookAndFeel("de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel");
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {
         }
