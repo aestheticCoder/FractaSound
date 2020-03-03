@@ -29,8 +29,8 @@ public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ 
 
     private void initComplexConverter(){
         this.cc = new CoordToComplexConverter("mandelbrot");
-        cc.setOriginRangeX(0, W);
-        cc.setOriginRangeY(0, H);
+        cc.setOriginRangeX(-2147483648, 2147483647);
+        cc.setOriginRangeY(-2147483648, 2147483647);
     }
     
     private void doDrawing(Graphics g){
@@ -52,20 +52,7 @@ public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ 
         super.paintComponent(g);
         doDrawing(g);
         g.drawImage(this.img, 0, 0, null);
-        System.out.println("Got Here");
     }
-
-    /*
-    @Override
-    public void stateChanged(ChangeEvent e) {
-        if (FourierTransform.isSamplePeakChanging()) {
-            audio.SamplePeak currentPeakValue = FourierTransform.getLatestPeak();
-            this.x = currentPeakValue.getReal();
-            this.y = currentPeakValue.getImag();
-            paintComponent(getGraphics());
-        }
-    }
-    */
 
     /*
     public void mouseMoved(java.awt.event.MouseEvent e) {

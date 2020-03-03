@@ -1,13 +1,12 @@
 package audio;
 
 import javax.sound.sampled.*;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
 public class AudioBeamer {
 
-    private static final int BUFFER_SIZE = 2200;
+    private static final int BUFFER_SIZE = 4;
 
     public synchronized void streamFile(String audioFilePath){
 
@@ -35,7 +34,7 @@ public class AudioBeamer {
             int bytesRead = -1;
 
             while ((bytesRead = audioStream.read(bytesBuffer)) != -1) {
-                FourierTransform.arrayChomski(bytesBuffer);
+                FourierTransform.fourierHelper(bytesBuffer);
                 sourceLine.write(bytesBuffer, 0, bytesRead);
             }
 
