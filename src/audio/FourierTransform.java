@@ -10,12 +10,19 @@ public class FourierTransform {
     private static List<AbstractObserver> observers = new ArrayList<>();
 
     /**
-     * Takes in another byte value, checks if the byte[] sufficientData is full, and then adds the new byte to the array
+     * fourierTransform (FFT or DFT) helper method)
+     * TODO: elaborate description of functionality
      *
-     * @param another another byte to be added onto the byte[] of values for parsing
+     * @param another
      */
     public static synchronized void fourierHelper(byte[] another) {
-        discreteFourier(another);
+        // Previously, call discreteFourier(another);
+
+        // Now, call the following:
+        float[] convertedPCM = convertBytes(another);
+        int fakeNumSamples = convertedPCM.length / 2;
+        int fakeSampleRate = 44100; // extract actual sample rate if needed later
+        complexFFT(convertedPCM, fakeNumSamples, fakeSampleRate);
     }
 
     /**
@@ -35,9 +42,11 @@ public class FourierTransform {
     }
 
     /**
-     * Converts a byte[] input into a double[] and then transforms it using Discrete Fourier
+     * // Replace this mess with something less cluttered that works as intended
      *
-     * @param convIntoFreq byte[] input to be converted into double[] and then undergo Discrete Fourier transformation
+     * Converts a byte[] input into a float[] and then transforms it using Discrete Fourier
+     *
+     * @param convIntoFreq byte[] input to be converted into float[] and then undergo Discrete Fourier transformation
      */
     private static void discreteFourier(byte[] convIntoFreq) { // byte[] input format wrapper for double[] input
         final int byteSize = 4;
@@ -77,6 +86,120 @@ public class FourierTransform {
         }
 
         latestPeak = new SamplePeak(maxReal, maxImag);
+        notifyAllObservers();
+    }
+
+    /**
+     * Step 1 of replacement; separate the conversion step for better method cohesion
+     *
+     * NOTE THAT THIS ONLY WORKS IF USING UNSIGNED PCM DATA, ADDITIONAL CASE NECESSARY FOR SIGNED
+     *
+     * @param input byte array
+     * @return float array
+     */
+    private static float[] convertBytes(byte[] input) {
+        float[] floats = new float[input.length / 2];
+        for(int i=0; i < input.length; i+=2) {
+            floats[i/2] = input[i] | (input[i+1] << 8);
+        }
+        return floats;
+    }
+
+    /**
+     * Step 2 of replacement; implement outer stage of FFT (
+     *
+     * @param sampleArray
+     * @param numSamples
+     * @param sampleRate
+     */
+    private static void complexFFT(float[] sampleArray, int numSamples, int sampleRate) {
+        int n, mmax, m, j, istep, i; // Clumsy C-style variable naming, fix variable names and implement closer to usage
+        float wtemp, wr, wpr, wpi, wi, theta, tempr, tempi;
+        // determine later if downcast of above variables to int/float from long/double is problematic in java implementation
+
+        // TODO: replace this horrifying direct-implementation of C++ code in Java (#define is gone at least)
+        //the complex array is real+complex so the array
+        // as a size n = 2* number of complex samples
+        // real part is the data[index] and
+        // the complex part is the data[index+1]
+        n = numSamples * 2;
+
+        //binary inversion (note that the indexes
+        // start from 0 witch means that the
+        // real part of the complex is on the even-indexes
+        // and the complex part is on the odd-indexes
+        j=0;
+        for (i=0;i<n/2;i+=2) {
+            if (j > i) {
+                //swap the real part
+                tempr = sampleArray[j];
+                sampleArray[j] = sampleArray[i];
+                sampleArray[i] = tempr;
+                //swap the complex part
+                tempr = sampleArray[j+1];
+                sampleArray[j+1] = sampleArray[i+1];
+                sampleArray[i+1] = tempr;
+                // checks if the changes occurs in the first half
+                // and use the mirrored effect on the second half
+                if((j/2)<(n/4)){
+                    //swap the real part
+                    tempr = sampleArray[(n-(i+2))];
+                    sampleArray[(n-(i+2))] = sampleArray[(n-(j+2))];
+                    sampleArray[(n-(j+2))] = tempr;
+                    //swap the complex part
+                    tempr = sampleArray[(n-(i+2))+1];
+                    sampleArray[(n-(i+2))+1] = sampleArray[(n-(j+2))+1];
+                    sampleArray[(n-(j+2))+1] = tempr;
+                }
+            }
+            m=n/2;
+            while (m >= 2 && j >= m) {
+                j -= m;
+                m = m/2;
+            }
+            j += m;
+        }
+
+        // Next is Danielson-Lanczos//Danielson-Lanzcos routine
+        mmax=2;
+        //external loop
+        while (n > mmax) {
+            istep = mmax<<1;
+            theta=(float)(2*Math.PI/mmax);
+            wtemp=(float)Math.sin(0.5*theta);
+            wpr = (float)-2.0*wtemp*wtemp;
+            wpi=(float)Math.sin(theta);
+            wr=1.0f;
+            wi=0.0f;
+            //internal loops TODO: find implicit arrayIndexOutOfBounds or infinite loop in nested loops below - THIS IS WHERE TO FOCUS
+            for (m=1;m<mmax;m+=2) {
+                for (i= m;i<=n;i+=istep) {
+                    j=i+mmax;
+                    tempr=wr*sampleArray[j-1]-wi*sampleArray[j];
+                    tempi=wr*sampleArray[j]+wi*sampleArray[j-1];
+                    sampleArray[j-1]=sampleArray[i-1]-tempr;
+                    sampleArray[j]=sampleArray[i]-tempi;
+                    sampleArray[i-1] += tempr;
+                    sampleArray[i] += tempi;
+                }
+                wr=(wtemp=wr)*wpr-wi*wpi+wr;
+                wi=wi*wpr+wtemp*wpi+wi;
+            }
+            mmax=istep;
+        }
+
+        // Next we determine fundamental frequency
+        int fundamental_frequency=0;
+        for(i=2; i<=sampleArray.length; i+=2) {
+            if ((i+1) < sampleArray.length && (fundamental_frequency+1) < sampleArray.length) {
+                if ((Math.pow(sampleArray[i], 2) + Math.pow(sampleArray[i + 1], 2)) > (Math.pow(sampleArray[fundamental_frequency], 2) + Math.pow(sampleArray[fundamental_frequency + 1], 2))) {
+                    fundamental_frequency = i;
+                }
+            }
+        }
+
+        // Last, we update latestPeak as the fundamental frequency (absolute maxima)
+        latestPeak = new SamplePeak(sampleArray[fundamental_frequency], sampleArray[fundamental_frequency + 1]);
         notifyAllObservers();
     }
 

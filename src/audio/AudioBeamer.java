@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class AudioBeamer {
 
-    private static final int BUFFER_SIZE = 4;
+    private static final int BUFFER_SIZE = 44100; // 4
 
     public synchronized void streamFile(String audioFilePath){
 
