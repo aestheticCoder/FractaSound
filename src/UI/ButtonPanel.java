@@ -1,6 +1,7 @@
 package UI;
 
 import audio.AudioBeamer;
+import graphics.HueMapper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,19 +14,26 @@ public class ButtonPanel extends JPanel {
 
     private JButton playButton = new JButton("Play");
     private JButton stopButton = new JButton("Stop");
-    private Dimension buttonDimension = new Dimension(80, 60);
+    private Dimension buttonDimension = new Dimension(70, 60);
     private AudioBeamer localAudioStream;
+    private  HueMapper localHueMapper;
     private ExecutorService executor;
+
 
     public ButtonPanel(){
         this.setPreferredSize(new Dimension(800,80));
         this.setBackground(Color.lightGray);
+        localAudioStream = new AudioBeamer();
+        localHueMapper = HueMapper.getInstance();
+
+        //add the elements to the panel
         streamSourceIconProperties();
+        colorSelector();
         playButtonProperties();
         stopButtonProperties();
         volumeSliderProperties();
 
-        localAudioStream = new AudioBeamer();
+
     }
 
     private void playButtonProperties(){
@@ -65,11 +73,48 @@ public class ButtonPanel extends JPanel {
 
     private void streamSourceIconProperties(){
         JLabel label = new JLabel("Stream source: ");
-        JTextField tf = new JTextField(12);
         this.add(label);
-        this.add(tf);
-        tf.setText("island_music_x.wav");
+        String[] wavFiles = { "island_music_x.wav", "sin_1000Hz_-3dBFs_3s.wav", "test250Hz_44100Hz_16bit_05sec.wav",
+                "sweep_10Hz_10000Hz_-3dBFS_2s.wav", "sweep_10Hz_10000Hz_-3dBFS_10s.wav",
+                "Medley1.wav", "ShakeYourBootay.wav"};
+        final JComboBox<String> cb = new JComboBox<String>(wavFiles);
+        cb.setVisible(true);
+        this.add(cb);
         Font sourceFont = new Font("SansSerif", Font.ITALIC, 11);
-        tf.setFont(sourceFont);
+        cb.setFont(sourceFont);
+        cb.setSelectedIndex(4);
+
+        cb.addActionListener( new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                JComboBox cb = (JComboBox)e.getSource();
+                int audioIndex = cb.getSelectedIndex();
+                String audioSource = (String) cb.getSelectedItem();
+                localAudioStream.setAudioFilePath(audioIndex);
+                System.out.println("Changed Audio Source to: " + audioSource);
+            }
+        });
+
+    }
+
+    private void colorSelector(){
+        JLabel label = new JLabel("Color Mood: ");
+        this.add(label);
+        String[] colorMoods = { "Default", "Calm", "Party", "Noir"};
+        final JComboBox<String> cb = new JComboBox<String>(colorMoods);
+        cb.setVisible(true);
+        this.add(cb);
+        Font sourceFont = new Font("SansSerif", Font.ITALIC, 11);
+        cb.setFont(sourceFont);
+        cb.setSelectedIndex(0);
+
+        cb.addActionListener( new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                JComboBox cb = (JComboBox)e.getSource();
+                int colorNum = cb.getSelectedIndex();
+                String color = (String) cb.getSelectedItem();
+                localHueMapper.setHueSetting(colorNum);
+                System.out.println("Changed Color Setting: " + color);
+            }
+        });
     }
 }

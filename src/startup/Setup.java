@@ -3,6 +3,7 @@ package startup;
 import UI.UIContainer;
 import audio.AudioBeamer;
 import audio.FourierTransform;
+import graphics.HueMapper;
 
 import javax.swing.*;
 //import de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel;

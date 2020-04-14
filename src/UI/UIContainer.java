@@ -1,6 +1,7 @@
 package UI;
 
 import audio.AudioBeamer;
+import graphics.HueMapper;
 
 import javax.security.auth.Subject;
 import javax.swing.*;

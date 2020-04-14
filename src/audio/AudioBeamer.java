@@ -1,5 +1,7 @@
 package audio;
 
+import graphics.HueMapper;
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.io.IOException;
 public class AudioBeamer {
 
     private static final int BUFFER_SIZE = 4;
+    private String audioFilePath = "src/audio/sweep_10Hz_10000Hz_-3dBFS_10s.wav";
 
     public synchronized void streamFile(String audioFilePath){
 
@@ -64,9 +67,45 @@ public class AudioBeamer {
         }
     }
 
-    public String getFilePath() {
-        return "src/audio/island_music_x.wav";
+    public void setAudioFilePath( int audioSource){
+        if( audioSource > 7 ){
+            System.out.println("Not a valid Hue setting, Hue Setting will be set to: Default");
+            audioSource = 4;
+        }
+        switch(audioSource){
+            case 0:
+                this.audioFilePath = "src/audio/island_music_x.wav";
+                System.out.println("Audio set to: Island Music");
+                break;
+            case 1:
+                this.audioFilePath = "src/audio/sin_1000Hz_-3dBFS_3s.wav";
+                System.out.println("Audio set to: sin 1000Hz 3s");
+                break;
+            case 2:
+                this.audioFilePath = "src/audio/test250Hz_44100Hz_16bit_05sec.wav";
+                System.out.println("Audio set to: 250Hz 5s");
+                break;
+            case 3:
+                this.audioFilePath = "src/audio/sweep_10Hz_10000Hz_-3dBFS_2s.wav";
+                System.out.println("Audio set to: Sweep 10-10000Hz 2s");
+                break;
+            case 4:
+                this.audioFilePath = "src/audio/sweep_10Hz_10000Hz_-3dBFS_10s.wav";
+                System.out.println("Audio set to: Sweep 10-10000Hz 10s");
+                break;
+            case 5:
+                this.audioFilePath = "src/audio/Medley1.wav";
+                System.out.println("Audio set to: Medley1");
+                break;
+            case 6:
+                this.audioFilePath = "src/audio/ShakeYourBootay.wav";
+                System.out.println("Audio set to: Shake Your Bootay");
+                break;
+        }
+
+
     }
+    public String getFilePath() { return audioFilePath; }
 
 }
 
