@@ -50,4 +50,11 @@ public class CoordToComplexConverter {
     public double convertToIm( double num ) {
         return ImC = (((num - originMinY) * imaginaryNumRange) / originRangeY) + imaginaryNumMin;
     }
+
+    public double getOriginMinX() {
+        return originMinX;
+    }
+    public double getOriginRangeX() {
+        return originRangeX;
+    }
 }

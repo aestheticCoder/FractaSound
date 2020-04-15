@@ -13,12 +13,9 @@ public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ 
 
     private BufferedImage img;
     private CoordToComplexConverter cc;
-    private double x,y = 0.0;
+    private double x,y,velocity = 0.0;
     private final double W;
     private final double H;
-
-    private Subject subject;
-
 
     public FractalAnimationPanel(){
         this.setPreferredSize(new Dimension(800,600));
@@ -46,7 +43,7 @@ public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ 
 
         double r = cc.convertToRe(this.x);
         double i = cc.convertToIm(this.y);
-        System.out.println(r + " " + i);
+        //System.out.println(r + " " + i);
         createFractal(r,i);
     }
 
@@ -178,13 +175,26 @@ public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ 
         }
     }
 
-
-
     @Override
     public void update() {
         audio.SamplePeak currentPeakValue = FourierTransform.getLatestPeak();
-        this.x = currentPeakValue.getReal();
-        this.y = currentPeakValue.getImag();
+
+        double accelerate = cc.convertToRe((currentPeakValue.getReal() + currentPeakValue.getImag()*2));
+        // TODO: later change the default acceleration value so that we don't use this horrifying avg*4 amalgam
+        if (currentPeakValue.getReal() > currentPeakValue.getImag()) {
+            accelerate *= -1; // TODO: later give a more meaningful acceleration directional change to avoid pendulum-motion
+        }
+        updatePosition(accelerate);
         repaint();
+    }
+
+    private void updatePosition(double acceleration) {
+        this.velocity += acceleration;
+        if ( (this.x + this.velocity) > (cc.getOriginMinX() + cc.getOriginRangeX()) || (this.x + this.velocity) < cc.getOriginMinX() ) {
+            this.velocity *= -1;
+        }
+        // TODO: later make this trace the mandelbrot set rather than just +/-x axis
+        this.x += this.velocity;
+        this.y = 0.0;
     }
 }
