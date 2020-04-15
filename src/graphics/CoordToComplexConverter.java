@@ -57,4 +57,10 @@ public class CoordToComplexConverter {
     public double getOriginRangeX() {
         return originRangeX;
     }
+    public double getOriginMinY() {
+        return originMinY;
+    }
+    public double getOriginRangeY() {
+        return originRangeY;
+    }
 }

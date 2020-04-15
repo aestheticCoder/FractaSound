@@ -1,6 +1,7 @@
 package graphics;
 
 import audio.FourierTransform;
+import audio.SamplePeak;
 import startup.AbstractObserver;
 
 import javax.security.auth.Subject;
@@ -13,9 +14,11 @@ public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ 
 
     private BufferedImage img;
     private CoordToComplexConverter cc;
-    private double x,y,velocity = 0.0;
+    private double x,y,velx,vely = 0.0;
+    private SamplePeak acceleration = new SamplePeak();
     private final double W;
     private final double H;
+    private double lastUpdateTime = System.currentTimeMillis();
 
     public FractalAnimationPanel(){
         this.setPreferredSize(new Dimension(800,600));
@@ -179,22 +182,42 @@ public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ 
     public void update() {
         audio.SamplePeak currentPeakValue = FourierTransform.getLatestPeak();
 
-        double accelerate = cc.convertToRe((currentPeakValue.getReal() + currentPeakValue.getImag()*2));
-        // TODO: later change the default acceleration value so that we don't use this horrifying avg*4 amalgam
-        if (currentPeakValue.getReal() > currentPeakValue.getImag()) {
-            accelerate *= -1; // TODO: later give a more meaningful acceleration directional change to avoid pendulum-motion
+        double x = cc.convertToRe(currentPeakValue.getReal());
+        double y = cc.convertToIm(currentPeakValue.getImag());
+
+        acceleration = new SamplePeak(x, y);
+        animateTransform();
+    }
+
+    private synchronized void animateTransform() {
+        if (System.currentTimeMillis() - lastUpdateTime < 100) {
+            lastUpdateTime = System.currentTimeMillis();
+            return; // early return for update called too early
         }
-        updatePosition(accelerate);
+
+        SamplePeak currentAccel = acceleration;
+        this.velx += currentAccel.getReal();
+        if ( (this.x + this.velx) > (cc.getOriginMinX() + cc.getOriginRangeX()) || (this.x + this.velx) < cc.getOriginMinX() ) {
+            this.velx *= -1;
+        }
+        this.vely += currentAccel.getImag();
+        if ( (this.y + this.vely) > (cc.getOriginMinY() + cc.getOriginRangeY()) || (this.y + this.vely) < cc.getOriginMinY() ) {
+            this.vely *= -1;
+        }
+
+        this.x += this.velx;
+        this.y += this.vely;
         repaint();
     }
 
+    /*
     private void updatePosition(double acceleration) {
         this.velocity += acceleration;
         if ( (this.x + this.velocity) > (cc.getOriginMinX() + cc.getOriginRangeX()) || (this.x + this.velocity) < cc.getOriginMinX() ) {
             this.velocity *= -1;
         }
-        // TODO: later make this trace the mandelbrot set rather than just +/-x axis
         this.x += this.velocity;
         this.y = 0.0;
     }
+    */
 }
