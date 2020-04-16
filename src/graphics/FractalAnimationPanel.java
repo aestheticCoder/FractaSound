@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ implements AbstractObserver {
+public class FractalAnimationPanel extends JPanel implements AbstractObserver {
 
     private BufferedImage img;
     private CoordToComplexConverter cc;
@@ -116,6 +116,7 @@ public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ 
                         break;
                 }
 
+
                 // Taking the ratio of number of iterations to max_iter
                 double value = (double)iter / maxIterations;
                 double d = Math.max(0.0, Math.min(1.0, value));
@@ -143,33 +144,27 @@ public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ 
     private synchronized void animateTransform() {
         if (System.currentTimeMillis() - lastUpdateTime < 10) {
             lastUpdateTime = System.currentTimeMillis();
-            return; // early return for update called too early
+
+            // early return for update called too early
+            return;
         }
 
         SamplePeak currentAccel = acceleration;
+
         this.velx += currentAccel.getReal();
         if ( (this.x + this.velx) > (cc.getOriginMinX() + cc.getOriginRangeX()) || (this.x + this.velx) < cc.getOriginMinX() ) {
             this.velx *= -1;
         }
+
         this.vely += currentAccel.getImag();
         if ( (this.y + this.vely) > (cc.getOriginMinY() + cc.getOriginRangeY()) || (this.y + this.vely) < cc.getOriginMinY() ) {
             this.vely *= -1;
         }
+
         acceleration = new SamplePeak();
 
         this.x += this.velx;
         this.y += this.vely;
         repaint();
     }
-
-    /*
-    private void updatePosition(double acceleration) {
-        this.velocity += acceleration;
-        if ( (this.x + this.velocity) > (cc.getOriginMinX() + cc.getOriginRangeX()) || (this.x + this.velocity) < cc.getOriginMinX() ) {
-            this.velocity *= -1;
-        }
-        this.x += this.velocity;
-        this.y = 0.0;
-    }
-    */
 }

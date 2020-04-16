@@ -1,9 +1,5 @@
 package UI;
 
-import audio.AudioBeamer;
-import graphics.HueMapper;
-
-import javax.security.auth.Subject;
 import javax.swing.*;
 import java.awt.*;
 
@@ -23,10 +19,6 @@ public class UIContainer extends JFrame {
         //Setup for UI Frame
         setTitle("Fractal Visualizer");
         setLayout( new BorderLayout());
-
-        //Intialize AudioBeamer - ACTUALLY DONT
-        // AudioBeamer localAudioStream = new AudioBeamer();
-
 
         //Add Components
         //Add Fractal Animation Panel

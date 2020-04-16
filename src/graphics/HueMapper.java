@@ -61,9 +61,9 @@ public class HueMapper {
             case PARTY:
                 return  makeColorMap(1024, new Color(0x0000CD), new Color(0xFFD700), new Color( 0xFF0000), new Color( 0x8B008B));
             case NOIR:
-                return  makeColorMap(1024, new Color(0x2F4F4F), Color.WHITE,new Color(0xC0C0C0),Color.BLACK);
+                return  makeColorMap(1024, new Color(0x2F4F4F), Color.WHITE, new Color(0xC0C0C0), Color.BLACK);
         }
-        return makeColorMap(1024, new Color(0x010143), Color.WHITE,new Color(0xFF00FF),Color.BLACK);
+        return makeColorMap(1024, new Color(0x010143), Color.WHITE, new Color(0xFF00FF), Color.BLACK);
     }
 
 
@@ -72,7 +72,7 @@ public class HueMapper {
      * @param in_colors the input colors
      * @return an array containing the colors linearly changing from the first input color to the last
      */
-    public static int[] makeColorMap(int steps, Color ... in_colors)
+    private static int[] makeColorMap(int steps, Color ... in_colors)
     {
         int colorMap[] = new int[steps];
         if (in_colors.length == 1)

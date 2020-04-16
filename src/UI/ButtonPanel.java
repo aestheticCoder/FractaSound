@@ -31,9 +31,7 @@ public class ButtonPanel extends JPanel {
         colorSelector();
         playButtonProperties();
         stopButtonProperties();
-        volumeSliderProperties();
-
-
+        //volumeSliderProperties();
     }
 
     private void playButtonProperties(){
@@ -82,7 +80,7 @@ public class ButtonPanel extends JPanel {
         this.add(cb);
         Font sourceFont = new Font("SansSerif", Font.ITALIC, 11);
         cb.setFont(sourceFont);
-        cb.setSelectedIndex(4);
+        cb.setSelectedIndex(5);
 
         cb.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent e){

@@ -1,7 +1,5 @@
 package audio;
 
-import graphics.HueMapper;
-
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -70,7 +68,7 @@ public class AudioBeamer {
     public void setAudioFilePath( int audioSource){
         if( audioSource > 7 ){
             System.out.println("Not a valid Hue setting, Hue Setting will be set to: Default");
-            audioSource = 4;
+            audioSource = 5;
         }
         switch(audioSource){
             case 0:
