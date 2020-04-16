@@ -19,7 +19,6 @@ public class FourierTransform {
      */
     public static synchronized void fourierHelper(byte[] another) {
         executor.submit(() -> new DiscreteFourier(another));
-        System.out.println("new sample");
     }
 
     /**
