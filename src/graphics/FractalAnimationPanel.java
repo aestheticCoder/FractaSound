@@ -3,12 +3,9 @@ package graphics;
 import audio.FourierTransform;
 import audio.SamplePeak;
 import startup.AbstractObserver;
-
-import javax.security.auth.Subject;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 
 public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ implements AbstractObserver {
 
@@ -190,7 +187,7 @@ public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ 
     }
 
     private synchronized void animateTransform() {
-        if (System.currentTimeMillis() - lastUpdateTime < 100) {
+        if (System.currentTimeMillis() - lastUpdateTime < 10) {
             lastUpdateTime = System.currentTimeMillis();
             return; // early return for update called too early
         }
@@ -204,6 +201,7 @@ public class FractalAnimationPanel extends JPanel /*implements ChangeListener*/ 
         if ( (this.y + this.vely) > (cc.getOriginMinY() + cc.getOriginRangeY()) || (this.y + this.vely) < cc.getOriginMinY() ) {
             this.vely *= -1;
         }
+        acceleration = new SamplePeak();
 
         this.x += this.velx;
         this.y += this.vely;
