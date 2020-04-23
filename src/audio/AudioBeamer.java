@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class AudioBeamer {
 
-    private static final int BUFFER_SIZE = 4;
+    private static final int BUFFER_SIZE = 10800;
     private String audioFilePath = "src/audio/sweep_10Hz_10000Hz_-3dBFS_10s.wav";
 
     public synchronized void streamFile(String audioFilePath){
@@ -22,7 +22,7 @@ public class AudioBeamer {
 
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
             final SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info);
-            sourceLine.open();
+            sourceLine.open(format, BUFFER_SIZE / 2);
 
 
             //final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -31,7 +31,7 @@ public class AudioBeamer {
 
             System.out.println("Playback started.");
 
-            byte[] bytesBuffer = new byte[BUFFER_SIZE];
+            byte[] bytesBuffer = new byte[BUFFER_SIZE / 4];
             int bytesRead = -1;
 
             while ((bytesRead = audioStream.read(bytesBuffer)) != -1) {

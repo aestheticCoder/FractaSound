@@ -1,7 +1,6 @@
 package audio;
 
 import startup.AbstractObserver;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -18,7 +17,8 @@ public class FourierTransform {
      * @param another another byte to be added onto the byte[] of values for parsing
      */
     public static synchronized void fourierHelper(byte[] another) {
-        executor.submit(() -> new DiscreteFourier(another));
+        //executor.submit(() -> new DiscreteFourier(another));
+        executor.submit(() -> new FastFourier(another));
     }
 
     /**
