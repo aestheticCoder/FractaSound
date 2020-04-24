@@ -24,7 +24,7 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         // initMouseListener();
         initComplexConverter();
         this.setBackground(Color.white);
-        FourierTransform.attach(this);
+        FourierTransform.getInstance().attach(this);
     }
 
     private void initComplexConverter(){
@@ -132,7 +132,7 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
 
     @Override
     public void update() {
-        audio.SamplePeak currentPeakValue = FourierTransform.getLatestPeak();
+        audio.SamplePeak currentPeakValue = FourierTransform.getInstance().getLatestPeak();
 
         double x = cc.convertToRe(currentPeakValue.getReal());
         double y = cc.convertToIm(currentPeakValue.getImag());

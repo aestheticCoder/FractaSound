@@ -45,7 +45,7 @@ public class DiscreteFourier {
             }
         }
 
-        FourierTransform.setLatestPeak(new SamplePeak(maxReal, maxImag));
-        FourierTransform.notifyAllObservers();
+        FourierTransform.getInstance().setLatestPeak(new SamplePeak(maxReal, maxImag));
+        FourierTransform.getInstance().notifyAllObservers();
     }
 }

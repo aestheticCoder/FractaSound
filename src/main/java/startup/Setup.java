@@ -18,10 +18,6 @@ public class Setup {
         } catch (Exception ignored) {
         }
 
-        // Initialize audio classes
-        FourierTransform fourierTransformer = new FourierTransform();
-
-
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
