@@ -17,11 +17,10 @@ public class AudioBeamer {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
 
             AudioFormat format = audioStream.getFormat();
-            FourierTransform localTransform = FourierTransform.getInstance();
 
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
             final SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info);
-            sourceLine.open(format, localTransform.getWindowSize() * 2);
+            sourceLine.open(format, FourierTransform.getInstance().getWindowSize() * 2);
 
 
             //final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -30,7 +29,7 @@ public class AudioBeamer {
 
             System.out.println("Playback started.");
 
-            byte[] bytesBuffer = new byte[localTransform.getWindowSize() * 2];
+            byte[] bytesBuffer = new byte[FourierTransform.getInstance().getWindowSize() * 2];
             int bytesRead = -1;
 
             while ((bytesRead = audioStream.read(bytesBuffer)) != -1) {
@@ -43,7 +42,7 @@ public class AudioBeamer {
                     imags[reImIt] = bytesBuffer[i + 1];
                     reImIt++;
                 }
-                localTransform.fourierHelper(reals, imags);
+                FourierTransform.getInstance().fourierHelper(reals, imags);
 
                 /*
                 int reImIt = 0;

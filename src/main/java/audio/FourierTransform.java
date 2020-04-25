@@ -24,7 +24,7 @@ public class FourierTransform {
         latestPeak = new SamplePeak(0,0);
         observers = new ArrayList<>();
         executor = Executors.newCachedThreadPool();
-        windowSize = 32768;
+        windowSize = 16384;
         windowLogTwo = (int)(Math.log(windowSize) / Math.log(2));
 
         // throw runtime exception if windowSize is not a power of 2
@@ -59,7 +59,7 @@ public class FourierTransform {
     }
 
     public void fourierHelper(double[] reals, double[] imags) {
-        executor.submit(() -> new FastFourier(reals, imags));
+        executor.submit(() -> new FastFourier(reals, imags, windowSize, windowLogTwo, cos, sin));
     }
 
     public void attach(AbstractObserver obs) {
@@ -82,14 +82,5 @@ public class FourierTransform {
     }
     public int getWindowSize() {
         return windowSize;
-    }
-    public int getWindowLogTwo() {
-        return windowLogTwo;
-    }
-    public double[] getCos() {
-        return cos;
-    }
-    public double[] getSin() {
-        return sin;
     }
 }

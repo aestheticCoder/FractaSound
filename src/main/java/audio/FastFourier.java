@@ -21,12 +21,9 @@ public class FastFourier {
      *   Permission to copy and use this program is granted
      *   as long as this header is included.
      ***************************************************************/
-    public FastFourier(double[] x, double[] y) {
+    public FastFourier(double[] x, double[] y, int n, int m, double[] cos, double[] sin) {
         int i,j,k,n1,n2,a;
         double c,s,e,t1,t2;
-        FourierTransform four = FourierTransform.getInstance();
-        int n = four.getWindowSize(), m = four.getWindowLogTwo();
-        double[] cos = four.getCos(), sin = four.getSin();
 
         // Bit-reverse
         j = 0;
@@ -81,8 +78,8 @@ public class FastFourier {
             if (y[iter] > maxImag) maxImag = y[iter];
         }
 
-        four.setLatestPeak(new SamplePeak(maxReal, maxImag));
-        four.notifyAllObservers();
+        FourierTransform.getInstance().setLatestPeak(new SamplePeak(maxReal, maxImag));
+        FourierTransform.getInstance().notifyAllObservers();
     }
 
     /*
