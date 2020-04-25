@@ -22,11 +22,10 @@ public class ButtonPanel extends JPanel {
 
     public ButtonPanel(){
         this.setPreferredSize(new Dimension(800,80));
-        this.setBackground(Color.lightGray);
         localAudioStream = new AudioBeamer();
         localHueMapper = HueMapper.getInstance();
 
-        //add the elements to the panel
+        //Add the elements to the panel
         streamSourceIconProperties();
         colorSelector();
         playButtonProperties();

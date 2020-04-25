@@ -5,10 +5,21 @@ plugins {
 
 application {
     mainClassName = "startup.Setup"
+    applicationDefaultJvmArgs = [" --add-exports=java.desktop/sun.swing=synthetica.base\n" +
+                                         "   --add-exports=java.desktop/sun.swing.table=synthetica.base\n" +
+                                         "   --add-exports=java.desktop/sun.swing.plaf.synth=synthetica.base\n" +
+                                         "   --add-opens=java.desktop/javax.swing.plaf.synth=synthetica.base\n" +
+                                         "   --add-opens=java.desktop/javax.swing.plaf.basic=synthetica.base\n" +
+                                         "   --add-opens=java.desktop/javax.swing=synthetica.base\n" +
+                                         "   --add-opens=java.desktop/javax.swing.tree=synthetica.base\n" +
+                                         "   --add-opens=java.desktop/java.awt.event=synthetica.base\n" +
+                                         "   --add-exports=java.desktop/sun.awt.shell=synthetica.base\n" +
+                                         "   --add-exports=java.base/sun.security.action=synthetica.base"]
 }
 
 dependencies {
     testImplementation 'junit:junit:4.13'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 repositories {

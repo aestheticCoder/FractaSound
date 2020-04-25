@@ -1,22 +1,27 @@
 package startup;
 
 import UI.UIContainer;
-import audio.FourierTransform;
-
 import javax.swing.*;
-//import de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel;
+import de.javasoft.plaf.synthetica.*;
+import de.javasoft.synthetica.blackeye.SyntheticaBlackEyeLookAndFeel;
+
+import java.text.ParseException;
+
 
 public class Setup {
     public static void main(String[] args) {
 
-        //Set Look and Feel
-        //Right now set to system look and feel
-        //Must before we initialize anything!
         try {
-            //UIManager.setLookAndFeel("de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel");
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) {
+            // Set L&F to Synthethica Black Eye
+            UIManager.setLookAndFeel( new SyntheticaBlackEyeLookAndFeel());
         }
+        catch (UnsupportedLookAndFeelException ulfe) {
+            ulfe.printStackTrace();
+        }
+        catch(ParseException pe){
+            pe.printStackTrace();
+        }
+
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -25,7 +30,7 @@ public class Setup {
                 uiContainer.pack();
                 uiContainer.setVisible(true);
             }
-
         });
+
     }
 }

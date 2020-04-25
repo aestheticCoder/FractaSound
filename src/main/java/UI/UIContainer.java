@@ -23,13 +23,7 @@ public class UIContainer extends JFrame {
         //Add Components
         //Add Fractal Animation Panel
         add(new graphics.FractalAnimationPanel(), BorderLayout.CENTER);
-
         //Add ButtonPanel
         add(new ButtonPanel(), BorderLayout.SOUTH);
-
-        /*
-        May need to create a custom look and feel for our UI frame -- setup right now but might want a better or custom one
-        As well as other optimizations and clean up for our UI
-         */
     }
 }
