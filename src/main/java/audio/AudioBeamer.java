@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class AudioBeamer {
-    private String audioFilePath = "audio/sweep_10Hz_10000Hz_-3dBFS_10s.wav";
+    private String audioFilePath = "src/main/java/audio/Medley1.wav";
 
     public synchronized void streamFile(String audioFilePath){
 
@@ -102,31 +102,31 @@ public class AudioBeamer {
         }
         switch(audioSource){
             case 0:
-                this.audioFilePath = "C:\\Users\\Grant's PC\\Documents\\Capstone\\masterProxy\\FractaSound\\src\\main\\java\\audio\\sin_1000Hz_-3dBFS_3s.wav";
+                this.audioFilePath = "src/main/java/audio/island_music_x.wav";
                 System.out.println("Audio set to: Island Music");
                 break;
             case 1:
-                this.audioFilePath = "audio/sin_1000Hz_-3dBFS_3s.wav";
+                this.audioFilePath = "src/main/java/audio/sweep_10Hz_10000Hz_-3dBFS_2s.wav";
                 System.out.println("Audio set to: sin 1000Hz 3s");
                 break;
             case 2:
-                this.audioFilePath = "audio/test250Hz_44100Hz_16bit_05sec.wav";
+                this.audioFilePath = "src/main/java/audio/test250Hz_44100Hz_16bit_05sec.wav";
                 System.out.println("Audio set to: 250Hz 5s");
                 break;
             case 3:
-                this.audioFilePath = "audio/sweep_10Hz_10000Hz_-3dBFS_2s.wav";
+                this.audioFilePath = "src/main/java/audio/sweep_10Hz_10000Hz_-3dBFS_2s.wav";
                 System.out.println("Audio set to: Sweep 10-10000Hz 2s");
                 break;
             case 4:
-                this.audioFilePath = "audio/sweep_10Hz_10000Hz_-3dBFS_10s.wav";
+                this.audioFilePath = "src/main/java/audio/sweep_10Hz_10000Hz_-3dBFS_10s.wav";
                 System.out.println("Audio set to: Sweep 10-10000Hz 10s");
                 break;
             case 5:
-                this.audioFilePath = "audio/Medley1.wav";
+                this.audioFilePath = "src/main/java/audio/Medley1.wav";
                 System.out.println("Audio set to: Medley1");
                 break;
             case 6:
-                this.audioFilePath = "audio/ShakeYourBootay.wav";
+                this.audioFilePath = "src/main/java/audio/ShakeYourBootay.wav";
                 System.out.println("Audio set to: Shake Your Bootay");
                 break;
         }
