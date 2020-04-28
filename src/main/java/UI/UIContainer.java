@@ -6,6 +6,7 @@ import java.awt.*;
 
 public class UIContainer extends JFrame {
 
+    private JFileChooser fc;
 
     public UIContainer(){
         initUI();
@@ -21,6 +22,8 @@ public class UIContainer extends JFrame {
         setLayout( new BorderLayout());
 
         //Add Components
+        //Add MenuBar
+        this.setJMenuBar(new MainMenuBar());
         //Add Fractal Animation Panel
         add(new graphics.FractalAnimationPanel(), BorderLayout.CENTER);
         //Add ButtonPanel

@@ -1,5 +1,7 @@
 package audio;
 
+import UI.MainMenuBar;
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -95,7 +97,7 @@ public class AudioBeamer {
     }
 
     public void setAudioFilePath( int audioSource){
-        if( audioSource > 7 ){
+        if( audioSource > 8 ){
             System.out.println("Not a valid Hue setting, Hue Setting will be set to: Default");
             audioSource = 5;
         }
@@ -127,6 +129,10 @@ public class AudioBeamer {
             case 6:
                 this.audioFilePath = "src/main/java/nativeAudioFiles/ShakeYourBootay.wav";
                 System.out.println("Audio set to: Shake Your Bootay");
+                break;
+            case 7:
+                this.audioFilePath = MainMenuBar.getUserFilePath();
+                System.out.println("Audio set to: user source");
                 break;
         }
 

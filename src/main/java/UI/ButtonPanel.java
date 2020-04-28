@@ -4,6 +4,7 @@ import audio.AudioBeamer;
 import graphics.HueMapper;
 
 import javax.swing.*;
+import javax.swing.colorchooser.ColorSelectionModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +18,10 @@ public class ButtonPanel extends JPanel {
     private Dimension buttonDimension = new Dimension(70, 60);
     private AudioBeamer localAudioStream;
     private  HueMapper localHueMapper;
+    private JColorChooser tcc;
+    private ColorSelectionModel csm;
     private ExecutorService executor;
+
 
 
     public ButtonPanel(){
@@ -73,7 +77,7 @@ public class ButtonPanel extends JPanel {
         this.add(label);
         String[] wavFiles = { "island_music_x.wav", "sin_1000Hz_-3dBFs_3s.wav", "test250Hz_44100Hz_16bit_05sec.wav",
                 "sweep_10Hz_10000Hz_-3dBFS_2s.wav", "sweep_10Hz_10000Hz_-3dBFS_10s.wav",
-                "Medley1.wav", "ShakeYourBootay.wav"};
+                "Medley1.wav", "ShakeYourBootay.wav", "user file"};
         final JComboBox<String> cb = new JComboBox<String>(wavFiles);
         cb.setVisible(true);
         this.add(cb);
@@ -96,7 +100,7 @@ public class ButtonPanel extends JPanel {
     private void colorSelector(){
         JLabel label = new JLabel("Color Mood: ");
         this.add(label);
-        String[] colorMoods = { "Default", "Calm", "Party", "Noir"};
+        String[] colorMoods = { "Default", "Calm", "Party", "Noir", };
         final JComboBox<String> cb = new JComboBox<String>(colorMoods);
         cb.setVisible(true);
         this.add(cb);
