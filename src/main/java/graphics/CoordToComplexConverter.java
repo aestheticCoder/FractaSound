@@ -19,8 +19,8 @@ public class CoordToComplexConverter {
         if( fractalType.equalsIgnoreCase("mandelbrot")){
             //setRealNumRange(0.375,-1.375);
 
-            setRealNumRange(0.5,-2.0);
-            setImaginaryNumRange(-1,1);
+            setRealNumRange(-2.0,0.5);
+            setImaginaryNumRange(-1.0,1.0);
         }
     }
 

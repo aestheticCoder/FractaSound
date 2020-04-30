@@ -78,6 +78,7 @@ public class FastFourier {
             if (y[iter] > maxImag) maxImag = y[iter];
         }
 
+        //System.out.println("Real: " + maxReal + " Imaginary: " + maxImag);
         FourierTransform.getInstance().setLatestPeak(new SamplePeak(maxReal, maxImag));
         FourierTransform.getInstance().notifyAllObservers();
     }

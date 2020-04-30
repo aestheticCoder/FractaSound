@@ -29,8 +29,13 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
 
     private void initComplexConverter(){
         this.cc = new CoordToComplexConverter("mandelbrot");
-        cc.setOriginRangeX(-2147483648, 2147483647);
-        cc.setOriginRangeY(-2147483648, 2147483647);
+        //Need to change conversion as it assumes a constant scale not a logarithmic one
+        //Hz is logarithmic so most of the output gets concentrated to one small end of the set
+
+        //Changed Range from -2 bil to +2bil, to 0 to +700 thou as it better reflects our range
+        //and doesn't overly shrink our data
+        cc.setOriginRangeX(0.0, 700000.0);
+        cc.setOriginRangeY(0.0, 700000.0);
     }
     
     private void doDrawing(Graphics g){
@@ -134,13 +139,42 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
     public void update() {
         audio.SamplePeak currentPeakValue = FourierTransform.getInstance().getLatestPeak();
 
-        double x = cc.convertToRe(currentPeakValue.getReal());
-        double y = cc.convertToIm(currentPeakValue.getImag());
+        this.x = currentPeakValue.getReal();
+        this.y = currentPeakValue.getImag();
 
-        acceleration = new SamplePeak(x, y);
+        /**This old implementation was converting x and y twice already converted once in repaint.
+         * it also reset the acceleration with a new sample peak esentally deleting any data for acceleration to
+         * work of off
+         */
+        //double xval = cc.convertToRe(currentPeakValue.getReal());
+        //double yval = cc.convertToIm(currentPeakValue.getImag());
+
+        //Debug Print lns
+        //System.out.println("Real Peak: " + currentPeakValue.getReal() + " Imag Peak: " + currentPeakValue.getImag());
+        //System.out.println("Real: " + xval + " Imaginary: " + yval);
+
+        //These comments are from before my fixes, but I'm leaving them so you can
+        //better understand what was going wrong.
+        //These values are losing a lot of data from being converted.
+        // before conversion Real and Imag peak values look dynamic/ good
+        //connection is fine
+        // xval stays around -0.750..no matter the aduio file
+        // yval stays 4.9 - 5.0 E -5 no matter the track
+
+        //accelration = new SamplePeak;
+
+        //Changed this so we don't delete our data
+        acceleration = currentPeakValue;
+
         animateTransform();
+        //repaint();
     }
 
+
+    /**
+     * This likly needs to be fixed so it doesn't get stuck after it goes across once diagonally.
+     * As it currently is.
+     */
     private synchronized void animateTransform() {
         if (System.currentTimeMillis() - lastUpdateTime < 10) {
             lastUpdateTime = System.currentTimeMillis();
