@@ -63,4 +63,20 @@ public class CoordToComplexConverter {
     public double getOriginRangeY() {
         return originRangeY;
     }
+
+    public double getImaginaryNumMin() {
+        return imaginaryNumMin;
+    }
+
+    public double getImaginaryNumRange() {
+        return imaginaryNumRange;
+    }
+
+    public double getRealNumMin() {
+        return realNumMin;
+    }
+
+    public double getRealNumRange() {
+        return realNumRange;
+    }
 }

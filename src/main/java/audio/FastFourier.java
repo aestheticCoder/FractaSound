@@ -73,9 +73,13 @@ public class FastFourier {
 
         double maxReal = x[0];
         double maxImag = y[0];
+        int fundamental = 0;
         for (int iter = 0; iter < x.length; iter++) {
-            if (x[iter] > maxReal) maxReal = x[iter];
-            if (y[iter] > maxImag) maxImag = y[iter];
+            if ( (Math.abs(x[iter]) + Math.abs(y[iter])) > (Math.abs(maxReal) + Math.abs(maxImag)) ) {
+                maxReal = x[iter];
+                maxImag = y[iter];
+                fundamental = iter;
+            }
         }
 
         //System.out.println("Real: " + maxReal + " Imaginary: " + maxImag);

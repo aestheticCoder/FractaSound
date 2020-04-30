@@ -24,7 +24,7 @@ public class FourierTransform {
         latestPeak = new SamplePeak(0,0);
         observers = new ArrayList<>();
         executor = Executors.newCachedThreadPool();
-        windowSize = 16384;
+        windowSize = 256;
         windowLogTwo = (int)(Math.log(windowSize) / Math.log(2));
 
         // throw runtime exception if windowSize is not a power of 2

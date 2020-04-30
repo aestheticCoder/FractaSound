@@ -176,6 +176,7 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
      * As it currently is.
      */
     private synchronized void animateTransform() {
+        // Artificial limiter on animation if FastFourier returns too quickly (not likely)
         if (System.currentTimeMillis() - lastUpdateTime < 10) {
             lastUpdateTime = System.currentTimeMillis();
 
@@ -185,12 +186,22 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
 
         SamplePeak currentAccel = acceleration;
 
-        this.velx += currentAccel.getReal();
+        if (this.velx > 0) {
+            this.velx += currentAccel.getReal();
+        }
+        else {
+            this.velx -= currentAccel.getReal();
+        }
         if ( (this.x + this.velx) > (cc.getOriginMinX() + cc.getOriginRangeX()) || (this.x + this.velx) < cc.getOriginMinX() ) {
             this.velx *= -1;
         }
 
-        this.vely += currentAccel.getImag();
+        if (this.vely > 0) {
+            this.vely += currentAccel.getImag();
+        }
+        else {
+            this.vely -= currentAccel.getImag();
+        }
         if ( (this.y + this.vely) > (cc.getOriginMinY() + cc.getOriginRangeY()) || (this.y + this.vely) < cc.getOriginMinY() ) {
             this.vely *= -1;
         }
