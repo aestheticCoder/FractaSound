@@ -11,11 +11,22 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
 
     private BufferedImage img;
     private CoordToComplexConverter cc;
-    private double x,y,velx,vely = 0.0;
+    // complex coordinate position
+    private double x,y = 0.0;
+
+    // transversal, amplitude, and freq/vol from previous Mandelbrot Cardioid
+    private double prevT, lastFreq, lastVol = 0.0;
+    private double prevA = 1.0;
+
+    //TODO: DELET THIS
+    /*
+    private double velx,vely = 0.0;
     private SamplePeak acceleration = new SamplePeak();
+    */
+    //END
+
     private final double W;
     private final double H;
-    private double lastUpdateTime = System.currentTimeMillis();
 
     public FractalAnimationPanel(){
         this.setPreferredSize(new Dimension(800,600));
@@ -46,10 +57,12 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
                 RenderingHints.VALUE_RENDER_QUALITY);
 
+        /*
         double r = cc.convertToRe(this.x);
         double i = cc.convertToIm(this.y);
+        */
         //System.out.println(r + " " + i);
-        createFractal(r,i);
+        createFractal(x,y);
     }
 
     @Override
@@ -139,53 +152,54 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
     public void update() {
         audio.SamplePeak currentPeakValue = FourierTransform.getInstance().getLatestPeak();
 
-        //this.x = currentPeakValue.getReal();
-        //this.y = currentPeakValue.getImag();
+        double freq = currentPeakValue.getReal();
+        double vol = currentPeakValue.getImag();
 
-        /**This old implementation was converting x and y twice already converted once in repaint.
-         * it also reset the acceleration with a new sample peak esentally deleting any data for acceleration to
-         * work of off
-         */
-        //double xval = cc.convertToRe(currentPeakValue.getReal());
-        //double yval = cc.convertToIm(currentPeakValue.getImag());
+        //acceleration = currentPeakValue;
 
-        //Debug Print lns
-        //System.out.println("Real Peak: " + currentPeakValue.getReal() + " Imag Peak: " + currentPeakValue.getImag());
-        //System.out.println("Real: " + xval + " Imaginary: " + yval);
-
-        //These comments are from before my fixes, but I'm leaving them so you can
-        //better understand what was going wrong.
-        //These values are losing a lot of data from being converted.
-        // before conversion Real and Imag peak values look dynamic/ good
-        //connection is fine
-        // xval stays around -0.750..no matter the aduio file
-        // yval stays 4.9 - 5.0 E -5 no matter the track
-
-        //acceleration = new SamplePeak;
-
-        //Changed this so we don't delete our data
-        acceleration = currentPeakValue;
-
-        animateTransform();
-        //repaint();
+        animateTransform(freq, vol);
     }
 
+    private synchronized void animateTransform(double freq, double vol) {
+        double t; // increase traversal for higher frequency, decrease for lower/equal
+        if (freq > this.lastFreq) {
+            t = this.prevT + 0.1;
 
-    /**
-     * This likly needs to be fixed so it doesn't get stuck after it goes across once diagonally.
-     * As it currently is.
-     */
-    private synchronized void animateTransform() {
-        // Artificial limiter on animation if FastFourier returns too quickly (not likely)
-        /*
-        if (System.currentTimeMillis() - lastUpdateTime < 10) {
-            lastUpdateTime = System.currentTimeMillis();
+            /*
 
-            // early return for update called too early
-            return;
+            TODO: Improve this by using a scaled difference between freq and lastFreq [not as essential as volume]
+
+             */
         }
-        */
+        else {
+            t = this.prevT - 0.1;
+        }
 
+        double a; // decrease amplitude for higher volume, increase for lower/equal;
+        // all amplitude values must be in range [1.0, 2.0]
+        if (vol > this.lastVol && prevA > 1.0) {
+            a = prevA - 0.1;
+
+            /*
+
+            TODO: Improve this by using a scaled difference between vol and lastVol
+
+             */
+        }
+        else if (prevA <= 2.0) {
+            a = prevA + 0.1;
+        }
+        else {
+            a = prevA;
+        }
+
+        // Find new circumference-position based on Mandelbrot Cardioid
+            // Mandelbrot cardioid: complex coordinate = (1 - (e^(i*t) - 1)^2) / 4
+            // = ( [cos(2t) - 2cos(t)] + i[sin(2t) - 2sin(t)] ) / 4
+        this.x = (a / 4) * ( Math.cos(2*t) - (2 * Math.cos(t)) );
+        this.y = (a / 4) * ( Math.sin(2*t) - (2 * Math.sin(t)) );
+
+        /*
         SamplePeak currentAccel = acceleration;
 
         if (this.velx > 0) {
@@ -212,8 +226,25 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
 
         this.x += this.velx;
         this.y += this.vely;
+        */
+
+        // Set "previous" values for next animateTransform
+        prevT = t;
+        if (a > 2.0) {
+            prevA = 2.0;
+        }
+        else if (a < 1.0) {
+            prevA = 1.0;
+        }
+        else {
+            prevA = a;
+        }
+        lastFreq = freq;
+        lastVol = vol;
+        /*
+        System.out.println(prevT + " " + prevA + " " + lastFreq + " " + lastVol);
+        System.out.println(x + " - " + y);
+        */
         repaint();
     }
-
-    // Mandelbrot determinant: complex coordinate = (1 - (e^(i*t) - 1)^2) / 4
 }
