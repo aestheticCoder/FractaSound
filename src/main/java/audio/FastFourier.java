@@ -71,6 +71,7 @@ public class FastFourier {
             }
         }
 
+        // Identify fundamental frequency
         double maxReal = x[0];
         double maxImag = y[0];
         double fundamental = 0.0;

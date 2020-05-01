@@ -19,13 +19,6 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
     private double prevT, lastFreq, lastVol = 0.0;
     private double prevA = 1.0;
 
-    //TODO: DELET THIS
-    /*
-    private double velx,vely = 0.0;
-    private SamplePeak acceleration = new SamplePeak();
-    */
-    //END
-
     private final double W;
     private final double H;
 
@@ -58,7 +51,7 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
                 RenderingHints.VALUE_RENDER_QUALITY);
 
-        /*
+        /* Probably not needed anymore, but will need for DiscreteFourier if ever used again
         double r = cc.convertToRe(this.x);
         double i = cc.convertToIm(this.y);
         */
@@ -156,8 +149,6 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         double freq = currentPeakValue.getReal();
         double vol = currentPeakValue.getImag();
 
-        //acceleration = currentPeakValue;
-
         animateTransform(freq, vol);
     }
 
@@ -177,7 +168,7 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         }
 
         double a; // decrease amplitude for higher volume, increase for lower/equal;
-        // all amplitude values must be in range [1.0, 1.6]
+        // all amplitude values must be in range [1.0, 1.4]
         if (vol > this.lastVol && prevA > 1.0) {
             a = prevA - 0.02;
 
@@ -199,35 +190,6 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
             // = ( [cos(2t) - 2cos(t)] + i[sin(2t) - 2sin(t)] ) / 4
         this.x = (a / 4) * ( Math.cos(2*t) - (2 * Math.cos(t)) );
         this.y = (a / 4) * ( Math.sin(2*t) - (2 * Math.sin(t)) );
-
-        /*
-        SamplePeak currentAccel = acceleration;
-
-        if (this.velx > 0) {
-            this.velx += currentAccel.getReal();
-        }
-        else {
-            this.velx -= currentAccel.getReal();
-        }
-        if ( (this.x + this.velx) > (cc.getOriginMinX() + cc.getOriginRangeX()) || (this.x + this.velx) < cc.getOriginMinX() ) {
-            this.velx *= -1;
-        }
-
-        if (this.vely > 0) {
-            this.vely += currentAccel.getImag();
-        }
-        else {
-            this.vely -= currentAccel.getImag();
-        }
-        if ( (this.y + this.vely) > (cc.getOriginMinY() + cc.getOriginRangeY()) || (this.y + this.vely) < cc.getOriginMinY() ) {
-            this.vely *= -1;
-        }
-
-        acceleration = new SamplePeak();
-
-        this.x += this.velx;
-        this.y += this.vely;
-        */
 
         // Set "previous" values for next animateTransform
         prevT = t;

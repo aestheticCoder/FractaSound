@@ -46,26 +46,6 @@ public class AudioBeamer {
                 }
                 FourierTransform.getInstance().fourierHelper(reals, imags);
 
-                /*
-                int reImIt = 0;
-                for (int i = 0; i < bytesBuffer.length; i += 2) {
-                    byte b0 = bytesBuffer[i];
-                    byte b1 = bytesBuffer[i + 1];
-
-                    if (format.isBigEndian()) {
-                        // zeros on right
-                        reals[reImIt] = b0 << 4;
-                        imags[reImIt] = b1 << 4;
-                    }
-                    else {
-                        // zeros on left
-                        reals[reImIt] = b0;
-                        imags[reImIt] = b1;
-                    }
-                    reImIt++;
-                }
-                */
-
                 //localTransform.fourierHelper(bytesBuffer);
                 sourceLine.write(bytesBuffer, 0, bytesRead);
             }
@@ -135,12 +115,7 @@ public class AudioBeamer {
                 System.out.println("Audio set to: user source");
                 break;
         }
-
-
     }
+
     public String getFilePath() { return audioFilePath; }
-
 }
-
-
-

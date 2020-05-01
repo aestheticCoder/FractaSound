@@ -13,7 +13,6 @@ public class FourierTransform {
     private List<AbstractObserver> observers;
     private ExecutorService executor;
     private int windowSize, windowLogTwo;
-    double[] window;
 
     // Lookup tables.  Only need to recompute when size of FFT changes.
     private double[] cos;
@@ -44,7 +43,8 @@ public class FourierTransform {
     }
 
     private void makeWindow() {
-        window = new double[windowSize];
+        // formerly an instance variable, but no longer needed
+        double[] window = new double[windowSize];
         for(int i = 0; i < window.length; i++)
             window[i] = 0.42 - 0.5 * Math.cos(2 * Math.PI * i / (windowSize - 1))
                     + 0.08 * Math.cos(4 * Math.PI * i / (windowSize - 1));
@@ -55,6 +55,7 @@ public class FourierTransform {
     }
 
     public void fourierHelper(byte[] another) {
+        // Only used with DFT
         executor.submit(() -> new DiscreteFourier(another));
     }
 
@@ -75,8 +76,6 @@ public class FourierTransform {
     public void setLatestPeak(SamplePeak nextPeak) {
         latestPeak = nextPeak;
     }
-
-    //getters
     public SamplePeak getLatestPeak() {
         return latestPeak;
     }
