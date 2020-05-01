@@ -12,7 +12,8 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
     private BufferedImage img;
     private CoordToComplexConverter cc;
     // complex coordinate position
-    private double x,y = 0.0;
+    private double x = 0.275;
+    private double y = 0.0;
 
     // transversal, amplitude, and freq/vol from previous Mandelbrot Cardioid
     private double prevT, lastFreq, lastVol = 0.0;
@@ -176,9 +177,9 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         }
 
         double a; // decrease amplitude for higher volume, increase for lower/equal;
-        // all amplitude values must be in range [1.0, 2.0]
+        // all amplitude values must be in range [1.0, 1.6]
         if (vol > this.lastVol && prevA > 1.0) {
-            a = prevA - 0.1;
+            a = prevA - 0.02;
 
             /*
 
@@ -186,8 +187,8 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
 
              */
         }
-        else if (prevA <= 2.0) {
-            a = prevA + 0.1;
+        else if (prevA <= 1.4) {
+            a = prevA + 0.02;
         }
         else {
             a = prevA;
@@ -230,8 +231,8 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
 
         // Set "previous" values for next animateTransform
         prevT = t;
-        if (a > 2.0) {
-            prevA = 2.0;
+        if (a > 1.4) {
+            prevA = 1.4;
         }
         else if (a < 1.0) {
             prevA = 1.0;
