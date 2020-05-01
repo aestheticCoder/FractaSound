@@ -73,7 +73,7 @@ public class FastFourier {
 
         double maxReal = x[0];
         double maxImag = y[0];
-        int fundamental = 0;
+        double fundamental = 0.0;
         for (int iter = 0; iter < x.length; iter++) {
             if ( (Math.abs(x[iter]) + Math.abs(y[iter])) > (Math.abs(maxReal) + Math.abs(maxImag)) ) {
                 maxReal = x[iter];
@@ -82,8 +82,16 @@ public class FastFourier {
             }
         }
 
+        // Convert fundamental to frequency domain
+        double freqMax = 10000; //max frequency in Hz
+        double freqMin = 10; //min frequency in Hz
+        fundamental = (fundamental / n) * (freqMax / n) + freqMin;
+
+        // Convert peak value to volume magnitude
+        double volume = (Math.abs(maxReal) + Math.abs(maxImag)) / 2;
+
         //System.out.println("Real: " + maxReal + " Imaginary: " + maxImag);
-        FourierTransform.getInstance().setLatestPeak(new SamplePeak(maxReal, maxImag));
+        FourierTransform.getInstance().setLatestPeak(new SamplePeak(fundamental, volume));
         FourierTransform.getInstance().notifyAllObservers();
     }
 

@@ -87,7 +87,7 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         //Make color map based on Hue setting
         int [] out_colors = HueMapper.getInstance().getHueSetting();
         //set initial maxIterations value
-        int maxIterations = 256;
+        int maxIterations = 1024;
         double newReC, newImC, oldReC, oldImC;
 
 
@@ -139,8 +139,8 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
     public void update() {
         audio.SamplePeak currentPeakValue = FourierTransform.getInstance().getLatestPeak();
 
-        this.x = currentPeakValue.getReal();
-        this.y = currentPeakValue.getImag();
+        //this.x = currentPeakValue.getReal();
+        //this.y = currentPeakValue.getImag();
 
         /**This old implementation was converting x and y twice already converted once in repaint.
          * it also reset the acceleration with a new sample peak esentally deleting any data for acceleration to
@@ -161,7 +161,7 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         // xval stays around -0.750..no matter the aduio file
         // yval stays 4.9 - 5.0 E -5 no matter the track
 
-        //accelration = new SamplePeak;
+        //acceleration = new SamplePeak;
 
         //Changed this so we don't delete our data
         acceleration = currentPeakValue;
@@ -177,12 +177,14 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
      */
     private synchronized void animateTransform() {
         // Artificial limiter on animation if FastFourier returns too quickly (not likely)
+        /*
         if (System.currentTimeMillis() - lastUpdateTime < 10) {
             lastUpdateTime = System.currentTimeMillis();
 
             // early return for update called too early
             return;
         }
+        */
 
         SamplePeak currentAccel = acceleration;
 
@@ -212,4 +214,6 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         this.y += this.vely;
         repaint();
     }
+
+    // Mandelbrot determinant: complex coordinate = (1 - (e^(i*t) - 1)^2) / 4
 }

@@ -22,7 +22,7 @@ public class AudioBeamer {
 
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
             final SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info);
-            sourceLine.open(format, FourierTransform.getInstance().getWindowSize() * 2);
+            sourceLine.open(format);
 
 
             //final ByteArrayOutputStream out = new ByteArrayOutputStream();
