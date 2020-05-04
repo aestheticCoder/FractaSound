@@ -11,6 +11,7 @@ import java.text.ParseException;
 public class Setup {
     public static void main(String[] args) {
 
+        /*
         try {
             // Set L&F to Synthethica Black Eye
             UIManager.setLookAndFeel( new SyntheticaBlackEyeLookAndFeel());
@@ -21,6 +22,7 @@ public class Setup {
         catch(ParseException pe){
             pe.printStackTrace();
         }
+         */
 
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {

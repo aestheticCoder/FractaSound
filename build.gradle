@@ -20,6 +20,9 @@ application {
 dependencies {
     testImplementation 'junit:junit:4.13'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    // https://mvnrepository.com/artifact/javazoom/jlayer
+    //compile group: 'javazoom', name: 'jlayer', version: '1.0.1'
+
 }
 
 repositories {

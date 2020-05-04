@@ -14,9 +14,11 @@ public class HueMapper {
         NOIR,
     }
     private hueSet hueSetting;
+    private int maxIters;
 
     public HueMapper(){
         this.hueSetting = hueSet.DEFAULT;
+        this.maxIters = 256;
     }
 
     //Utilizing the eager instantiation of the Singleton Design Pattern
@@ -117,5 +119,14 @@ public class HueMapper {
             colorMap[i] = rgb;
         }
         return colorMap;
+    }
+
+    //Max iters
+    public void setMaxIters( int iterNum){
+        this.maxIters = iterNum;
+    }
+
+    public int getMaxIters(){
+        return this.maxIters;
     }
 }
