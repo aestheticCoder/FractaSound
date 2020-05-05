@@ -83,15 +83,17 @@ public class FastFourier {
             }
         }
 
+        /* NOT ACTUALLY RELEVANT FOR IMPLEMENTATION
         // Convert fundamental to frequency domain
         double freqMax = 10000; //max frequency in Hz
         double freqMin = 10; //min frequency in Hz
         fundamental = (fundamental / n) * (freqMax / n) + freqMin;
+        */
 
         // Convert peak value to volume magnitude
         double volume = (Math.abs(maxReal) + Math.abs(maxImag)) / 2;
 
-        //System.out.println("Real: " + maxReal + " Imaginary: " + maxImag);
+        System.out.println("ff: " + fundamental + " vol: " + volume);
         FourierTransform.getInstance().setLatestPeak(new SamplePeak(fundamental, volume));
         FourierTransform.getInstance().notifyAllObservers();
     }

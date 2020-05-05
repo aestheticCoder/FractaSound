@@ -155,8 +155,11 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
 
     private synchronized void animateTransform(double freq, double vol) {
         double t; // increase traversal for higher frequency, decrease for lower/equal
-        if (freq > this.lastFreq) {
-            t = this.prevT + 0.1;
+        if (freq < this.lastFreq) {
+            t = this.prevT - 0.02;
+        }
+        else if (freq > this.lastFreq) {
+            t = this.prevT + 0.02;
 
             /*
 
@@ -165,21 +168,15 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
              */
         }
         else {
-            t = this.prevT - 0.1;
+            t = this.prevT;
         }
 
         double a; // decrease amplitude for higher volume, increase for lower/equal;
         // all amplitude values must be in range [1.0, 1.4]
         if (vol > this.lastVol && prevA > 1.0) {
             a = prevA - 0.02;
-
-            /*
-
-            TODO: Improve this by using a scaled difference between vol and lastVol
-
-             */
         }
-        else if (prevA <= 1.4) {
+        else if (vol < this.lastVol && prevA < 1.4) {
             a = prevA + 0.02;
         }
         else {
