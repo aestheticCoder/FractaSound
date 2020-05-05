@@ -150,6 +150,9 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         double freq = currentPeakValue.getReal();
         double vol = currentPeakValue.getImag();
 
+        //System.out.println("Frequency " + freq);
+        //System.out.println("Volume " + vol);
+
         animateTransform(freq, vol);
     }
 

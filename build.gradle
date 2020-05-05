@@ -19,7 +19,11 @@ application {
 
 dependencies {
     testImplementation 'junit:junit:4.13'
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'javazoom:jlayer:1.0.1'
+    implementation 'fr.delthas:javamp3:1.0.1'
+
+    //'fr.delthas', name: 'javamp3', version: '1.0.1'
+    //implementation fileTree(dir: 'libs', include: ['*.jar'])
     // https://mvnrepository.com/artifact/javazoom/jlayer
     //compile group: 'javazoom', name: 'jlayer', version: '1.0.1'
 

@@ -2,8 +2,8 @@ package startup;
 
 import UI.UIContainer;
 import javax.swing.*;
-import de.javasoft.plaf.synthetica.*;
-import de.javasoft.synthetica.blackeye.SyntheticaBlackEyeLookAndFeel;
+//import de.javasoft.plaf.synthetica.*;
+//import de.javasoft.synthetica.blackeye.SyntheticaBlackEyeLookAndFeel;
 
 import java.text.ParseException;
 
