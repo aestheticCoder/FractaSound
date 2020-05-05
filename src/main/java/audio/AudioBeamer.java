@@ -24,13 +24,11 @@ public class AudioBeamer {
             final SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info);
             sourceLine.open(format);
 
-
-            //final ByteArrayOutputStream out = new ByteArrayOutputStream();
-
             sourceLine.start();
 
             System.out.println("Playback started.");
 
+            FourierTransform.getInstance().setWindowSize((int)sourceLine.getFormat().getSampleRate());
             byte[] bytesBuffer = new byte[FourierTransform.getInstance().getWindowSize() * 2];
             int bytesRead = -1;
 

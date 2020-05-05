@@ -19,27 +19,8 @@ public class FourierTransform {
     private double[] sin;
 
     private FourierTransform() {
-        // Set default values
-        latestPeak = new SamplePeak(0,0);
         observers = new ArrayList<>();
         executor = Executors.newCachedThreadPool();
-        windowSize = 256;
-        windowLogTwo = (int)(Math.log(windowSize) / Math.log(2));
-
-        // throw runtime exception if windowSize is not a power of 2
-        if(windowSize != (1 << windowLogTwo))
-            throw new RuntimeException("FFT length must be power of 2");
-
-        // precompute tables
-        cos = new double[windowSize / 2];
-        sin = new double[windowSize / 2];
-
-        for(int i=0; i<windowSize/2; i++) {
-            cos[i] = Math.cos(-2 * Math.PI * i / windowSize);
-            sin[i] = Math.sin(-2 * Math.PI * i / windowSize);
-        }
-
-        makeWindow();
     }
 
     private void makeWindow() {
@@ -61,6 +42,38 @@ public class FourierTransform {
 
     public void fourierHelper(double[] reals, double[] imags) {
         executor.submit(() -> new FastFourier(reals, imags, windowSize, windowLogTwo, cos, sin));
+    }
+
+    public void setWindowSize(int sampleRate) {
+        // Set default values
+        latestPeak = new SamplePeak(0,0);
+
+        if (sampleRate <= 11025) {
+            windowSize = 32;
+        }
+        else if (sampleRate <= 44100) {
+            windowSize = 256;
+        }
+        else {
+            windowSize = 1024;
+        }
+        System.out.println(windowSize);
+        windowLogTwo = (int)(Math.log(windowSize) / Math.log(2));
+
+        // throw runtime exception if windowSize is not a power of 2
+        if(windowSize != (1 << windowLogTwo))
+            throw new RuntimeException("FFT length must be power of 2");
+
+        // precompute tables
+        cos = new double[windowSize / 2];
+        sin = new double[windowSize / 2];
+
+        for(int i=0; i<windowSize/2; i++) {
+            cos[i] = Math.cos(-2 * Math.PI * i / windowSize);
+            sin[i] = Math.sin(-2 * Math.PI * i / windowSize);
+        }
+
+        makeWindow();
     }
 
     public void attach(AbstractObserver obs) {
