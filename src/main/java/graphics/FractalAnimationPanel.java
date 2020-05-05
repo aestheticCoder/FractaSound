@@ -28,7 +28,7 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         H = this.getPreferredSize().getHeight();
         // initMouseListener();
         initComplexConverter();
-        this.setBackground(Color.white);
+        this.setBackground(Color.black);
         FourierTransform.getInstance().attach(this);
     }
 
@@ -94,7 +94,8 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         //Make color map based on Hue setting
         int [] out_colors = HueMapper.getInstance().getHueSetting();
         //set initial maxIterations value
-        int maxIterations = 1024;
+        //int maxIterations = 1024;
+        int maxIterations = HueMapper.getInstance().getMaxIters();
         double newReC, newImC, oldReC, oldImC;
 
 

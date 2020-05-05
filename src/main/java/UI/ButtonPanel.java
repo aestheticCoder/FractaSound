@@ -32,6 +32,7 @@ public class ButtonPanel extends JPanel {
         //Add the elements to the panel
         streamSourceIconProperties();
         colorSelector();
+        iterationSelector();
         playButtonProperties();
         stopButtonProperties();
         //volumeSliderProperties();
@@ -115,6 +116,27 @@ public class ButtonPanel extends JPanel {
                 String color = (String) cb.getSelectedItem();
                 localHueMapper.setHueSetting(colorNum);
                 System.out.println("Changed Color Setting: " + color);
+            }
+        });
+    }
+    private void iterationSelector() {
+        JLabel label = new JLabel("Max Iters: ");
+        this.add(label);
+        String[] maxIters = {"256", "1024", "128", "64", "32", "2", };
+        final JComboBox<String> cb = new JComboBox<String>(maxIters);
+        cb.setVisible(true);
+        this.add(cb);
+        Font sourceFont = new Font("SansSerif", Font.ITALIC, 11);
+        cb.setFont(sourceFont);
+        cb.setSelectedIndex(0);
+
+        cb.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JComboBox cb = (JComboBox) e.getSource();
+                int iterIndex = cb.getSelectedIndex();
+                String maxIterNum = (String) cb.getSelectedItem();
+                localHueMapper.setMaxIters(Integer.parseInt(maxIterNum));
+                System.out.println("Changed Max Iterations to: " + maxIterNum);
             }
         });
     }
