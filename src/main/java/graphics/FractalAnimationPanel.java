@@ -155,17 +155,15 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
 
     private synchronized void animateTransform(double freq, double vol) {
         double t; // increase traversal for higher frequency, decrease for lower/equal
-        if (freq < this.lastFreq) {
-            t = this.prevT - 0.02;
-        }
-        else if (freq > this.lastFreq) {
-            t = this.prevT + 0.02;
+        if (freq > this.lastFreq) {
+            t = this.prevT + 0.1;
 
             /*
-
             TODO: Improve this by using a scaled difference between freq and lastFreq [not as essential as volume]
-
              */
+        }
+        else if (freq < this.lastFreq) {
+            t = this.prevT - 0.1;
         }
         else {
             t = this.prevT;
@@ -173,19 +171,19 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
 
         double a; // decrease amplitude for higher volume, increase for lower/equal;
         // all amplitude values must be in range [1.0, 1.4]
-        if (vol > this.lastVol && prevA > 1.0) {
+        if (vol == this.lastVol) {
+            a = prevA;
+        }
+        else if (vol > this.lastVol && prevA > 1.0) {
             a = prevA - 0.02;
         }
-        else if (vol < this.lastVol && prevA < 1.4) {
-            a = prevA + 0.02;
-        }
         else {
-            a = prevA;
+            a = prevA + 0.02;
         }
 
         // Find new circumference-position based on Mandelbrot Cardioid
-            // Mandelbrot cardioid: complex coordinate = (1 - (e^(i*t) - 1)^2) / 4
-            // = ( [cos(2t) - 2cos(t)] + i[sin(2t) - 2sin(t)] ) / 4
+        // Mandelbrot cardioid: complex coordinate = (1 - (e^(i*t) - 1)^2) / 4
+        // = ( [cos(2t) - 2cos(t)] + i[sin(2t) - 2sin(t)] ) / 4
         this.x = (a / 4) * ( Math.cos(2*t) - (2 * Math.cos(t)) );
         this.y = (a / 4) * ( Math.sin(2*t) - (2 * Math.sin(t)) );
 

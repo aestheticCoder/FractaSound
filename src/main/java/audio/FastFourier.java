@@ -93,7 +93,7 @@ public class FastFourier {
         // Convert peak value to volume magnitude
         double volume = (Math.abs(maxReal) + Math.abs(maxImag)) / 2;
 
-        System.out.println("ff: " + fundamental + " vol: " + volume);
+        //System.out.println("ff: " + fundamental + " vol: " + volume);
         FourierTransform.getInstance().setLatestPeak(new SamplePeak(fundamental, volume));
         FourierTransform.getInstance().notifyAllObservers();
     }
