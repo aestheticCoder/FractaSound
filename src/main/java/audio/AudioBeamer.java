@@ -75,7 +75,7 @@ public class AudioBeamer {
     }
 
     public void setAudioFilePath( int audioSource){
-        if( audioSource > 8 ){
+        if( audioSource > 9 ){
             System.out.println("Not a valid Hue setting, Hue Setting will be set to: Default");
             audioSource = 5;
         }
@@ -109,8 +109,12 @@ public class AudioBeamer {
                 System.out.println("Audio set to: Shake Your Bootay");
                 break;
             case 7:
-                this.audioFilePath = MainMenuBar.getUserFilePath();
-                System.out.println("Audio set to: user source");
+                this.audioFilePath = MainMenuBar.getUserWAVFilePath();
+                System.out.println("Audio set to: Local WAV file.");
+                break;
+            case 8:
+                this.audioFilePath = MainMenuBar.getUserMP3FilePath();
+                System.out.println("Audio set to: Local MP3 file.");
                 break;
         }
     }

@@ -78,7 +78,7 @@ public class ButtonPanel extends JPanel {
         this.add(label);
         String[] wavFiles = { "island_music_x.wav", "sin_1000Hz_-3dBFs_3s.wav", "test250Hz_44100Hz_16bit_05sec.wav",
                 "sweep_10Hz_10000Hz_-3dBFS_2s.wav", "sweep_10Hz_10000Hz_-3dBFS_10s.wav",
-                "Medley1.wav", "ShakeYourBootay.wav", "user file"};
+                "Medley1.wav", "ShakeYourBootay.wav", "Imported WAV file", "Imported MP3 file"};
         final JComboBox<String> cb = new JComboBox<String>(wavFiles);
         cb.setVisible(true);
         this.add(cb);
