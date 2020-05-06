@@ -9,10 +9,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class AudioBeamer {
+public class AudioBeamer implements Runnable {
     private String audioFilePath = "src/main/java/nativeAudioFiles/Medley1.wav";
+    private boolean endStream;
 
-    public synchronized void streamFile(String audioFilePath){
+    public void run() {
+        endStream = false;
         boolean isWav = true;
         if (audioFilePath.substring(audioFilePath.length() - 4).equalsIgnoreCase(".mp3")) {
             isWav = false;
@@ -40,7 +42,7 @@ public class AudioBeamer {
                 int bytesRead = -1;
 
                 // Read bytes from music via audioStream
-                while ((bytesRead = audioStream.read(bytesBuffer)) != -1) {
+                while ((bytesRead = audioStream.read(bytesBuffer)) != -1 && !endStream) {
                     double[] reals = new double[bytesBuffer.length / 2];
                     double[] imags = new double[bytesBuffer.length / 2];
 
@@ -80,7 +82,7 @@ public class AudioBeamer {
                 int bytesRead = -1;
 
                 // Read bytes from music via audioStream
-                while ((bytesRead = sound.read(bytesBuffer)) != -1) {
+                while ((bytesRead = sound.read(bytesBuffer)) != -1 && !endStream) {
                     double[] reals = new double[bytesBuffer.length / 2];
                     double[] imags = new double[bytesBuffer.length / 2];
 
@@ -109,15 +111,6 @@ public class AudioBeamer {
         }
         catch(IOException ioe){
             ioe.printStackTrace();
-        }
-    }
-
-    public void mixerQuery(){
-        Mixer.Info[] mixInfos = AudioSystem.getMixerInfo();
-
-        for(Mixer.Info info : mixInfos)
-        {
-            System.out.println(info.getName() + " ----- " + info.getDescription());
         }
     }
 
@@ -167,4 +160,7 @@ public class AudioBeamer {
     }
 
     public String getFilePath() { return audioFilePath; }
+    public void close() {
+        endStream = true;
+    }
 }

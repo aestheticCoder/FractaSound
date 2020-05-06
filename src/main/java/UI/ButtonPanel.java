@@ -8,8 +8,6 @@ import javax.swing.colorchooser.ColorSelectionModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ButtonPanel extends JPanel {
 
@@ -20,9 +18,6 @@ public class ButtonPanel extends JPanel {
     private  HueMapper localHueMapper;
     private JColorChooser tcc;
     private ColorSelectionModel csm;
-    private ExecutorService executor;
-
-
 
     public ButtonPanel(){
         this.setPreferredSize(new Dimension(800,80));
@@ -44,9 +39,9 @@ public class ButtonPanel extends JPanel {
         playButton.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 System.out.println("Playing AudioStream");
-                executor = Executors.newSingleThreadExecutor();
                 //Start of AudioBeamer Worker Thread
-                executor.submit(() -> localAudioStream.streamFile(localAudioStream.getFilePath()));
+                Thread t = new Thread(localAudioStream);
+                t.start();
             }
         });
     }
@@ -57,7 +52,7 @@ public class ButtonPanel extends JPanel {
         stopButton.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 System.out.println("Stopping AudioStream");
-                executor.shutdown();
+                localAudioStream.close();
             }
         });
     }

@@ -6,7 +6,8 @@ public class AudioBeamerTest {
         String audioFilePath = "C:\\Users\\Alex\\Music\\Tchaikovsky-op19-no3-fueillet-d-album.mp3";
         //String audioFilePath = "island_music_x.wav";
         AudioBeamer player = new AudioBeamer();
-        player.streamFile(audioFilePath);
+        // CODE BELOW NO LONGER WORKS IN THIS WAY - SEE ButtonPanel FOR PROPER SYNTAX FOR CALLING AUDIOBEAMER
+        //player.streamFile(audioFilePath);
         //player.playMP3Option2(audioFilePath);
     }
 }
