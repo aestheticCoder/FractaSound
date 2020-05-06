@@ -1,6 +1,7 @@
 package UI;
 
 import audio.AudioBeamer;
+import graphics.FractalAnimationPanel;
 import graphics.HueMapper;
 
 import javax.swing.*;
@@ -16,13 +17,14 @@ public class ButtonPanel extends JPanel {
     private Dimension buttonDimension = new Dimension(70, 60);
     private AudioBeamer localAudioStream;
     private  HueMapper localHueMapper;
-    private JColorChooser tcc;
-    private ColorSelectionModel csm;
+    private FractalAnimationPanel fracAPInstance;
 
-    public ButtonPanel(){
+
+    public ButtonPanel(FractalAnimationPanel fracAP){
         this.setPreferredSize(new Dimension(800,80));
         localAudioStream = new AudioBeamer();
         localHueMapper = HueMapper.getInstance();
+        fracAPInstance = fracAP;
 
         //Add the elements to the panel
         streamSourceIconProperties();
@@ -30,7 +32,6 @@ public class ButtonPanel extends JPanel {
         iterationSelector();
         playButtonProperties();
         stopButtonProperties();
-        //volumeSliderProperties();
     }
 
     private void playButtonProperties(){
@@ -55,17 +56,6 @@ public class ButtonPanel extends JPanel {
                 localAudioStream.close();
             }
         });
-    }
-
-    private void volumeSliderProperties(){
-        JSlider volSlider = new JSlider(JSlider.HORIZONTAL,0,100,50);
-        JLabel label = new JLabel("Volume: ");
-        this.add(label);
-        this.add(volSlider);
-        volSlider.setMajorTickSpacing(50);
-        volSlider.setMinorTickSpacing(10);
-        volSlider.setPaintTicks(true);
-        volSlider.setPaintLabels(true);
     }
 
     private void streamSourceIconProperties(){
