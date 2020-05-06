@@ -11,6 +11,8 @@ public class HueMapper {
         DEFAULT,
         CALM,
         PARTY,
+        CLASSICAL,
+        TOOL,
         NOIR,
     }
     private hueSet hueSetting;
@@ -30,7 +32,7 @@ public class HueMapper {
     }
 
     public void setHueSetting(int newHueSetting){
-        if( newHueSetting > 3 ){
+        if( newHueSetting > 6){
             System.out.println("Not a valid Hue setting, Hue Setting will be set to: Default");
             newHueSetting = 0;
         }
@@ -48,6 +50,14 @@ public class HueMapper {
                 System.out.println("Color set to: PARTY");
                 break;
             case 3:
+                this.hueSetting = hueSet.CLASSICAL;
+                System.out.println("Color set to: CLASSICAL");
+                break;
+            case 4:
+                this.hueSetting = hueSet.TOOL;
+                System.out.println("Color set to: TOOL");
+                break;
+            case 5:
                 this.hueSetting = hueSet.NOIR;
                 System.out.println("Color set to: NOIR");
                 break;
@@ -59,11 +69,15 @@ public class HueMapper {
             case DEFAULT:
                 return  makeColorMap(1024, new Color(0x010143), Color.WHITE,new Color(0xFF00FF),Color.BLACK);
             case CALM:
-                return  makeColorMap(1024, new Color(0xB0E0E6), new Color (0x008080),new Color(0xFFFF33), new Color(0x2E8B57));
+                return  makeColorMap(1024, new Color(0xB0E0E6), new Color (0x008080),new Color(0xFFFF33), new Color(0xB6FCD5));
             case PARTY:
                 return  makeColorMap(1024, new Color(0x0000CD), new Color(0xFFD700), new Color( 0xFF0000), new Color( 0x8B008B));
+            case CLASSICAL:
+                return  makeColorMap(1024, new Color(0xE4BB7D), new Color(0x961919), Color.WHITE, new Color(0xB96666));
+            case TOOL:
+                return makeColorMap(1024, new Color(0x313147), new Color(0x5B5B64), Color.WHITE, Color.BLACK);
             case NOIR:
-                return  makeColorMap(1024, new Color(0x2F4F4F), Color.WHITE, new Color(0xC0C0C0), Color.BLACK);
+                return makeColorMap(1024, new Color(0x73737A), new Color(0x404043), Color.WHITE, Color.BLACK);
         }
         return makeColorMap(1024, new Color(0x010143), Color.WHITE, new Color(0xFF00FF), Color.BLACK);
     }

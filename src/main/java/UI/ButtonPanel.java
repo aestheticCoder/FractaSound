@@ -101,7 +101,7 @@ public class ButtonPanel extends JPanel {
     private void colorSelector(){
         JLabel label = new JLabel("Color Mood: ");
         this.add(label);
-        String[] colorMoods = { "Default", "Calm", "Party", "Noir", };
+        String[] colorMoods = { "Default", "Calm", "Party", "Classical", "Tool", "Noir",};
         final JComboBox<String> cb = new JComboBox<String>(colorMoods);
         cb.setVisible(true);
         this.add(cb);
