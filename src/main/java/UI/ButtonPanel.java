@@ -38,11 +38,14 @@ public class ButtonPanel extends JPanel {
         playButton.setPreferredSize(buttonDimension);
         this.add(playButton);
         playButton.addActionListener( new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                System.out.println("Playing AudioStream");
-                //Start of AudioBeamer Worker Thread
-                Thread t = new Thread(localAudioStream);
-                t.start();
+            public void actionPerformed(ActionEvent e) {
+                if (!localAudioStream.isRunning()) {
+                    System.out.println("Playing AudioStream");
+                    //Start of AudioBeamer Worker Thread
+                    fracAPInstance.resetValues();
+                    Thread t = new Thread(localAudioStream);
+                    t.start();
+                }
             }
         });
     }

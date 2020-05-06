@@ -209,4 +209,13 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         */
         repaint();
     }
+
+    public void resetValues() {
+        x = 0.275;
+        y = 0.0;
+        prevT = 0.0;
+        lastFreq = 0.0;
+        lastVol = 0.0;
+        prevA = 1.0;
+    }
 }

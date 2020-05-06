@@ -12,8 +12,11 @@ import java.nio.file.Paths;
 public class AudioBeamer implements Runnable {
     private String audioFilePath = "src/main/java/nativeAudioFiles/Medley1.wav";
     private boolean endStream;
+    private boolean running = false;
 
+    @Override
     public void run() {
+        running = true;
         endStream = false;
         boolean isWav = true;
         if (audioFilePath.substring(audioFilePath.length() - 4).equalsIgnoreCase(".mp3")) {
@@ -112,6 +115,7 @@ public class AudioBeamer implements Runnable {
         catch(IOException ioe){
             ioe.printStackTrace();
         }
+        running = false;
     }
 
     public void setAudioFilePath( int audioSource){
@@ -162,5 +166,8 @@ public class AudioBeamer implements Runnable {
     public String getFilePath() { return audioFilePath; }
     public void close() {
         endStream = true;
+    }
+    public boolean isRunning() {
+        return running;
     }
 }
