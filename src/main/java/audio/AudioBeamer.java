@@ -25,62 +25,85 @@ public class AudioBeamer {
         //AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, false);
 
         try {
-            AudioInputStream audioStream;
-
             if (isWav) { // wav file parsing
                 File audioFile = new File(audioFilePath);
-                audioStream = AudioSystem.getAudioInputStream(audioFile);
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+
+                AudioFormat format = audioStream.getFormat();
+
+                // Establish SourceDataLine for audio output to speakers
+                DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+                final SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info);
+                sourceLine.open();
+                sourceLine.start();
+                System.out.println("Playback started.");
+
+                // Create byte[] for data analysis in FourierTransform
+                FourierTransform.getInstance().setWindowSize((int)sourceLine.getFormat().getSampleRate());
+                byte[] bytesBuffer = new byte[FourierTransform.getInstance().getWindowSize() * 2];
+                int bytesRead = -1;
+
+                // Read bytes from music via audioStream
+                while ((bytesRead = audioStream.read(bytesBuffer)) != -1) {
+                    double[] reals = new double[bytesBuffer.length / 2];
+                    double[] imags = new double[bytesBuffer.length / 2];
+
+                    int reImIt = 0;
+                    for (int i = 0; i < bytesBuffer.length; i += 2) {
+                        reals[reImIt] = bytesBuffer[i];
+                        imags[reImIt] = bytesBuffer[i + 1];
+                        reImIt++;
+                    }
+                    FourierTransform.getInstance().fourierHelper(reals, imags);
+                    sourceLine.write(bytesBuffer, 0, bytesRead);
+                }
+
+                sourceLine.drain();
+                sourceLine.close();
+                audioStream.close();
+
+                System.out.println("Playback completed.");
             }
             else { // mp3 file parsing
                 Path path = Paths.get(audioFilePath);
-
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 Sound sound = new Sound(new BufferedInputStream(Files.newInputStream(path)));
 
-                // Read and decode the encoded sound data into the byte array output stream (blocking)
-                int read = sound.decodeFullyInto(os);
+                AudioFormat format = sound.getAudioFormat();
 
-                // A sample takes 2 bytes
-                int samples = read / 2;
+                // Establish SourceDataLine for audio output to speakers
+                DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+                final SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info);
+                sourceLine.open();
+                sourceLine.start();
+                System.out.println("Playback started.");
 
-                audioStream = new AudioInputStream(new ByteArrayInputStream(os.toByteArray()), sound.getAudioFormat(), samples);
-            }
+                // Create byte[] for data analysis in FourierTransform
+                FourierTransform.getInstance().setWindowSize((int)sourceLine.getFormat().getSampleRate());
+                byte[] bytesBuffer = new byte[FourierTransform.getInstance().getWindowSize() * 2];
+                int bytesRead = -1;
 
-            AudioFormat format = audioStream.getFormat();
+                // Read bytes from music via audioStream
+                while ((bytesRead = sound.read(bytesBuffer)) != -1) {
+                    double[] reals = new double[bytesBuffer.length / 2];
+                    double[] imags = new double[bytesBuffer.length / 2];
 
-            DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-            final SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info);
-            sourceLine.open();
-
-            sourceLine.start();
-
-            System.out.println("Playback started.");
-
-            FourierTransform.getInstance().setWindowSize((int)sourceLine.getFormat().getSampleRate());
-            byte[] bytesBuffer = new byte[FourierTransform.getInstance().getWindowSize() * 2];
-            int bytesRead = -1;
-
-            while ((bytesRead = audioStream.read(bytesBuffer)) != -1) {
-                double[] reals = new double[bytesBuffer.length / 2];
-                double[] imags = new double[bytesBuffer.length / 2];
-
-                int reImIt = 0;
-                for (int i = 0; i < bytesBuffer.length; i += 2) {
-                    reals[reImIt] = bytesBuffer[i];
-                    imags[reImIt] = bytesBuffer[i + 1];
-                    reImIt++;
+                    int reImIt = 0;
+                    for (int i = 0; i < bytesBuffer.length; i += 2) {
+                        reals[reImIt] = bytesBuffer[i];
+                        imags[reImIt] = bytesBuffer[i + 1];
+                        reImIt++;
+                    }
+                    FourierTransform.getInstance().fourierHelper(reals, imags);
+                    sourceLine.write(bytesBuffer, 0, bytesRead);
                 }
-                FourierTransform.getInstance().fourierHelper(reals, imags);
 
-                //localTransform.fourierHelper(bytesBuffer);
-                sourceLine.write(bytesBuffer, 0, bytesRead);
+                sourceLine.drain();
+                sourceLine.close();
+                sound.close();
+
+                System.out.println("Playback completed.");
             }
-
-            sourceLine.drain();
-            sourceLine.close();
-            audioStream.close();
-
-            System.out.println("Playback completed.");
         }
         catch(LineUnavailableException lue){
             lue.printStackTrace();

@@ -57,7 +57,6 @@ public class FourierTransform {
         else {
             windowSize = 1024;
         }
-        System.out.println(windowSize);
         windowLogTwo = (int)(Math.log(windowSize) / Math.log(2));
 
         // throw runtime exception if windowSize is not a power of 2
