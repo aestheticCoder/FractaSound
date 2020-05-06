@@ -17,19 +17,40 @@ public class AudioBeamer {
     private String audioFilePath = "src/main/java/nativeAudioFiles/Medley1.wav";
 
     public synchronized void streamFile(String audioFilePath){
-
-        File audioFile = new File(audioFilePath);
+        boolean isWav = true;
+        if (audioFilePath.substring(audioFilePath.length() - 4).equalsIgnoreCase(".mp3")) {
+            isWav = false;
+        }
 
         //AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, false);
 
-        try{
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+        try {
+            AudioInputStream audioStream;
+
+            if (isWav) { // wav file parsing
+                File audioFile = new File(audioFilePath);
+                audioStream = AudioSystem.getAudioInputStream(audioFile);
+            }
+            else { // mp3 file parsing
+                Path path = Paths.get(audioFilePath);
+
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                Sound sound = new Sound(new BufferedInputStream(Files.newInputStream(path)));
+
+                // Read and decode the encoded sound data into the byte array output stream (blocking)
+                int read = sound.decodeFullyInto(os);
+
+                // A sample takes 2 bytes
+                int samples = read / 2;
+
+                audioStream = new AudioInputStream(new ByteArrayInputStream(os.toByteArray()), sound.getAudioFormat(), samples);
+            }
 
             AudioFormat format = audioStream.getFormat();
 
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
             final SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info);
-            sourceLine.open(format);
+            sourceLine.open();
 
             sourceLine.start();
 
@@ -113,7 +134,7 @@ public class AudioBeamer {
 
             // let's copy the decoded data samples into a file!
             Files.copy(sound, Paths.get("C:\\Users\\Alex\\Desktop\\MP3 output\\test1.raw"));
-            //sound.decodeFullyInto(outputsteam)
+            //sound.decodeFullyInto(outputstream)
         }
         catch(IOException ioe){
             ioe.printStackTrace();
