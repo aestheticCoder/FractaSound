@@ -2,10 +2,6 @@ package audio;
 
 import UI.MainMenuBar;
 import fr.delthas.javamp3.Sound;
-import javazoom.jl.decoder.Bitstream;
-import javazoom.jl.decoder.BitstreamException;
-import javazoom.jl.decoder.Decoder;
-import javazoom.jl.decoder.DecoderException;
 
 import javax.sound.sampled.*;
 import java.io.*;
@@ -115,55 +111,6 @@ public class AudioBeamer {
             ioe.printStackTrace();
         }
     }
-
-    public void playMP3Option1(String audioFilePath){
-
-        /*
-        try {
-            Bitstream bitStream = new Bitstream(new FileInputStream(audioFilePath));
-
-            //set condition to check if there are still more samples to decode if yes continue
-            //else stop
-            // aka while(undecoded != null)
-
-            while (condition) {
-                Decoder decoder = new Decoder();
-                int[] samples = decoder.decodeFrame(bitStream.readFrame(), bitStream); //returns the next 2304 samples
-                bitStream.closeFrame();
-
-                //do whatever with your samples
-            }
-        }
-        catch (FileNotFoundException fnfe){
-            fnfe.printStackTrace();
-        }
-        catch(BitstreamException bse){
-            bse.printStackTrace();
-        }
-        catch( DecoderException de){
-            de.printStackTrace();
-        }
-         */
-    }
-
-    public void playMP3Option2(String audioFilePath){
-        Path path = Paths.get(audioFilePath);
-
-        try(Sound sound = new Sound(new BufferedInputStream(Files.newInputStream(path)))) {
-            // no need to buffer the SoundInputStream
-
-            // get sound metadata
-            System.out.println(sound.getSamplingFrequency());
-
-            // let's copy the decoded data samples into a file!
-            Files.copy(sound, Paths.get("C:\\Users\\Alex\\Desktop\\MP3 output\\test1.raw"));
-            //sound.decodeFullyInto(outputstream)
-        }
-        catch(IOException ioe){
-            ioe.printStackTrace();
-        }
-    }
-
 
     public void mixerQuery(){
         Mixer.Info[] mixInfos = AudioSystem.getMixerInfo();
