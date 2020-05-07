@@ -12,12 +12,14 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
     private BufferedImage img;
     private CoordToComplexConverter cc;
     // complex coordinate position
+    private final double MANDEL_MIN = 1.2;
+    private final double MANDEL_MAX = 1.4;
     private double x = 0.275;
     private double y = 0.0;
 
     // transversal, amplitude, and freq/vol from previous Mandelbrot Cardioid
     private double prevT, lastFreq, lastVol = 0.0;
-    private double prevA = 1.0;
+    private double prevA = MANDEL_MIN;
 
     private final double W;
     private final double H;
@@ -173,15 +175,15 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         }
 
         double a; // decrease amplitude for higher volume, increase for lower/equal;
-        // all amplitude values must be in range [1.0, 1.4]
+        // all amplitude values must be in range [1.1, 1.4]
         if (vol == this.lastVol) {
             a = prevA;
         }
-        else if (vol > this.lastVol && prevA > 1.0) {
-            a = prevA - 0.02;
+        else if (vol > this.lastVol && prevA > MANDEL_MIN) {
+            a = prevA - 0.01;
         }
         else {
-            a = prevA + 0.02;
+            a = prevA + 0.01;
         }
 
         // Find new circumference-position based on Mandelbrot Cardioid
@@ -192,21 +194,17 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
 
         // Set "previous" values for next animateTransform
         prevT = t;
-        if (a > 1.4) {
-            prevA = 1.4;
+        if (a > MANDEL_MAX) {
+            prevA = MANDEL_MAX;
         }
-        else if (a < 1.0) {
-            prevA = 1.0;
+        else if (a < MANDEL_MIN) {
+            prevA = MANDEL_MIN;
         }
         else {
             prevA = a;
         }
         lastFreq = freq;
         lastVol = vol;
-        /*
-        System.out.println(prevT + " " + prevA + " " + lastFreq + " " + lastVol);
-        System.out.println(x + " - " + y);
-        */
         repaint();
     }
 
@@ -216,6 +214,7 @@ public class FractalAnimationPanel extends JPanel implements AbstractObserver {
         prevT = 0.0;
         lastFreq = 0.0;
         lastVol = 0.0;
-        prevA = 1.0;
+        prevA = MANDEL_MIN;
+        repaint();
     }
 }
