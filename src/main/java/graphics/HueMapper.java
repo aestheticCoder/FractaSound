@@ -20,7 +20,7 @@ public class HueMapper {
 
     public HueMapper(){
         this.hueSetting = hueSet.DEFAULT;
-        this.maxIters = 256;
+        this.maxIters = 128;
     }
 
     //Utilizing the eager instantiation of the Singleton Design Pattern

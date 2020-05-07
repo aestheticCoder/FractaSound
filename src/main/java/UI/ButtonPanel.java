@@ -110,7 +110,7 @@ public class ButtonPanel extends JPanel {
     private void iterationSelector() {
         JLabel label = new JLabel("Max Iters: ");
         this.add(label);
-        String[] maxIters = {"256", "1024", "128", "64", "32", "2", };
+        String[] maxIters = {"128", "256", "64", "32", };
         final JComboBox<String> cb = new JComboBox<String>(maxIters);
         cb.setVisible(true);
         this.add(cb);
