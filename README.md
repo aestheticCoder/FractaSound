@@ -6,6 +6,7 @@ A Dynamic Audio Visualizer Utilizing Fractal Patterns
 * [Technologies](#technologies)
 * [Setup](#setup)
 * [Inspiration](#inspiration)
+* [Screenshots](#screenshots)
 
 ## Abstract :
   FractaSound is a fractal-based audio visualizer; this Java desktop application aims to provide users with an appealing and customizable animation accompaniment for music. After installing the application, users will be able to import their own music in .WAV or .MP3 form. Users may also select one of several color theme presets to customize the animation to their liking. During the process of the visualization, pitch and volume is extracted by Fast Fourier Transform (FFT), to produce a fractal animation using the fundamental frequency of a current audio sample of the input music. This combination of pitch and volume is used to render a specific Julia Set fractal belonging to the Mandelbrot Set, creating an intuitive and interesting audio visualizer for all to enjoy.
@@ -28,3 +29,10 @@ To run this project, clone the master branch to your local machine.
 These tutorials was where we started when we began creating Julia sets in Java, even as our porject grew into something unique these tutorials are still mentioned here as they helped us get started in the very begining of the project.
 * Fractal Advanced : Julia Set Basics (with Java Code).  http://tech.abdulfatir.com/2014/05/julia-set-basics.html
 * Fractal Advanced : Julia Set Advanced (with Java Code). http://tech.abdulfatir.com/2014/05/julia-set-advanced.html
+
+## Screenshots :
+Screenshots from the project, including a screenshot of the full app on the *Default* colors, and two other screenshots of fractals generated from the app showing off the *Party* and *Noir* color themes respectivly.
+
+<img src ="fractaSoundImages/appScreenshot.png" width="600"> 
+<img src ="fractaSoundImages/fractalScreenshot1.png" width="600"> 
+<img src ="fractaSoundImages/fractalScreenshot2.png" width="600"> 
