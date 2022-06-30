@@ -115,6 +115,9 @@ public class AudioBeamer implements Runnable {
         catch(IOException ioe){
             ioe.printStackTrace();
         }
+        catch(NullPointerException npe){
+            npe.printStackTrace();
+        }
         running = false;
     }
 
